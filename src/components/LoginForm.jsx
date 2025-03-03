@@ -1,6 +1,6 @@
 'use client';
 import '../app/globals.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Header from '../components/Header';
 import { useValidateEmail } from '../app/hooks/useValidate';
 import { useRouter } from 'next/navigation';
@@ -97,19 +97,29 @@ export default function LoginForm() {
 
 
     // Handle the form state
-    const [form, setForm] = useState('Phone')
+    const [form, setForm] = useState('Phone');
+
+    // Ref for the input field
+    const inputRef = useRef(null);
+
+    // Focus the input when the form state changes
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [form]);
 
     // Change the form state from phone number to Email
     const changeForm = (form) => {
         setForm(form);
-    }
+    };
 
 
     return (
         <div className="bg-[#f7f7f7] text-black w-full h-screen flex flex-col">
             <Header />
-            <div className="flex flex-grow p-[30px] md:p-2 md:mb-[40px] mb-[50px] h-full justify-center items-center ">
-                <div className="min-h-[514px] md:mt-[45px] md:ml-[-3px] form-container w-full max-w-[360px] flex flex-col">
+            <div className="flex flex-grow px-[20px] min-h-[514px] md:pt-[55px] pt-[80px] pb-0 md:p-2 md:mb-[40px] mb-0 md:h-full justify-center items-start md:items-center ">
+                <div className="min-h-[514px]  md:mt-[45px] md:ml-[-3px] form-container w-full max-w-[360px] flex flex-col">
                     {/* Header */}
                     <div className="w-full">
                         <div className='pt-[1rem] h-[2.5rem]'>
@@ -129,7 +139,7 @@ export default function LoginForm() {
                         <form action="" className="w-full sm:pr-[8px]">
                             <div className="flex flex-col w-full gap-[1rem]">
                                 <div className='flex flex-row w-full gap-[0.5rem] py-[1rem]'>
-                                    {/* Phone number Input */}
+                                    {/* Inputs */}
                                     {form === 'Phone' ? (
                                         <div className='overflow-hidden h-[56px] gap-x-2 flex w-full rounded-[1rem] caret-[#4f55f1] text-[#717173]'>
                                             {/* Country Code Selector */}
@@ -164,6 +174,7 @@ export default function LoginForm() {
                                             {/* Number Input */}
                                             <div className="group bg-[#ebebf0] hover:bg-[#e2e2e7] flex flex-grow px-[16px] h-full rounded-2xl">
                                                 <input
+                                                    ref={inputRef}
                                                     type="number"
                                                     placeholder="Phone number"
                                                     className="w-full text-[#191c1f] outline-none appearance-none bg-[#ebebf0] rounded-2xl h-full focus:outline-none placeholder-[#191c1f98] group-hover:bg-[#e2e2e7]"
@@ -176,6 +187,7 @@ export default function LoginForm() {
                                             {/* Email Input */}
                                             <div className="group bg-[#ebebf0] hover:bg-[#e2e2e7] flex flex-grow px-[16px] h-full rounded-2xl">
                                                 <input
+                                                    ref={inputRef}
                                                     type="email"
                                                     placeholder="Enter Your Email"
                                                     className="w-full text-[#191c1f] outline-none appearance-none bg-[#ebebf0] rounded-2xl h-full focus:outline-none placeholder-[#191c1f98] group-hover:bg-[#e2e2e7]"
@@ -209,7 +221,7 @@ export default function LoginForm() {
 
                             {/* Login methods */}
                             <div className='flex justify-around'>
-                                {/* Login with email */}
+                                {/* Login with Email */}
                                 <div className='flex flex-col items-center gap-[0.4rem] text-[#191c1f]'>
                                     <button className='bg-white flex items-center justify-center w-[3rem] h-[3rem] rounded-[9999px]'
                                         onClick={() => {
@@ -222,7 +234,7 @@ export default function LoginForm() {
                                     </div>
                                 </div>
 
-                                {/* Login with email */}
+                                {/* Login with Google */}
                                 <div className='flex flex-col items-center gap-[0.4rem] text-[#191c1f]'>
                                     <button className='bg-white flex items-center justify-center w-[3rem] h-[3rem] rounded-[9999px]'>
                                         <img src="https://assets.revolut.com/assets/icons/LogoGoogle.svg" alt="" />
@@ -232,7 +244,7 @@ export default function LoginForm() {
                                     </div>
                                 </div>
 
-                                {/* Login with email */}
+                                {/* Login with Apple */}
                                 <div className='flex flex-col items-center gap-[0.4rem] text-[#191c1f]'>
                                     <button className='bg-white flex items-center justify-center w-[3rem] h-[3rem] rounded-[9999px]'>
                                         <img src="https://assets.revolut.com/assets/icons/LogoIOs.svg" alt="" />
@@ -242,8 +254,8 @@ export default function LoginForm() {
                                     </div>
                                 </div>
 
-                                {/* Login with email */}
-                                <div className='md:hidden flex flex-col items-center gap-[0.4rem] text-[#191c1f]'>
+                                {/* Login with QR code */}
+                                <div className='hidden flex-col items-center gap-[0.4rem] text-[#191c1f]'>
                                     <button className='bg-white flex items-center justify-center w-[3rem] h-[3rem] rounded-[9999px]'>
                                         <img src="https://assets.revolut.com/assets/icons/Qr.svg" alt="" />
                                     </button>
@@ -287,7 +299,7 @@ export default function LoginForm() {
             </div >
 
             {/* footer */}
-            < div className='h-[68px] px-[2rem] mx-auto md:mx-0 md:max-w-[839px] w-full md:pb-[10px] md:relative absolute bottom-0 flex justify-center md:justify-start items-start bg-[#f7f7f7]' >
+            < div className='h-[68px] px-[2rem] mx-auto pb-[7px] md:mx-0 md:max-w-[839px] w-full md:pb-[10px] md:relative flex justify-center md:justify-start items-start bg-[#f7f7f7]' >
                 <div className="h-fit md:absolute bottom-[19px] left-[30px] gap-y-2 gap-x-8 items-center justify-center md:justify-start md:flex-row flex-col flex">
                     <button className='text-[#717173] tracking-[0.0009px] items-center gap-x-[9px] rounded-[0.75rem] flex justify-center text-sm'>
                         English (United States)

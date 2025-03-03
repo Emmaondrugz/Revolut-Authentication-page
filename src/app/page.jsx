@@ -24,6 +24,8 @@ export default function Login() {
   }, []);
 
   return (
-    <LoginForm />
+    <div className="h-screen bg-[#f7f7f7]">
+      <LoginForm />
+    </div>
   );
 }
