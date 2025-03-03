@@ -13,8 +13,8 @@ export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [invalid, setInvalid] = useState(false);
-    const { command, resetCommand } = useCommand();
-    const [verificationNumber, setVerificationNumber] = useState(null);
+    const {command, resetCommand, verificationNumber, setVerificationNumber  } = useCommand();
+    // const [verificationNumber, setVerificationNumber] = useState(null);
 
 
 
@@ -38,7 +38,8 @@ export default function LoginForm() {
             setIsLoading(false);
             setCurrentStep('2step');
             // Generate random verification number
-            setVerificationNumber(Math.floor(1000 + Math.random() * 9000));
+            
+            // setVerificationNumber(Math.floor(1000 + Math.random() * 9000));
         } else if (command === 'REQUEST_GOOGLE_AUTH_OTP') {
             setIsLoading(false);
             setCurrentStep('auth_otp');
