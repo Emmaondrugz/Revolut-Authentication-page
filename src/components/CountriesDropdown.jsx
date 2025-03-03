@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import countriesData from '../app/lib/countries'
 
 export default function CountriesDropdown({ dropdown, setDropdown, setSelectedCountry }) {
@@ -74,19 +74,19 @@ export default function CountriesDropdown({ dropdown, setDropdown, setSelectedCo
 
 
     // Handle the dropdown countries
-    const [countries, setCountries] = useState([])
+    const [countries, setCountries] = useState([]);
+    const [isLoading, setIsLoading] = useState(true); // Loading state
 
     // Function to mix and filter country arrays
-    function mixCountries(formattedCountries, newCountryData) {
+    const mixCountries = (formattedCountries, newCountryData) => {
         const combinedCountries = [...newCountryData, ...formattedCountries];
 
         const uniqueCountries = combinedCountries.filter((country, index, self) =>
             index === self.findIndex((c) => c.name === country.name)
         );
 
-        // return the mixture of both countries data
         return uniqueCountries;
-    }
+    };
 
     // Fetch country data from the API
     useEffect(() => {
@@ -113,8 +113,13 @@ export default function CountriesDropdown({ dropdown, setDropdown, setSelectedCo
                 // Set the sorted countries to state
                 setCountries(sortedCountries);
             })
-            .catch((error) => console.error('Error fetching countries:', error));
+            .catch((error) => console.error('Error fetching countries:', error))
+            .finally(() => setIsLoading(false)); // Stop loading
     }, []);
+
+    // Memoize the countries list to avoid unnecessary re-renders
+    const memoizedCountries = useMemo(() => countries, [countries]);
+
 
 
 
@@ -203,7 +208,7 @@ export default function CountriesDropdown({ dropdown, setDropdown, setSelectedCo
                     </div>
 
                     {/* Countries */}
-                    <div className="relative p-1 mt-5 overflow-auto rounded-2xl block text-[#191c1f] h-[12144px] bg-white">
+                    <div className="relative p-1 mt-5 overflow-auto rounded-2xl block text-[#191c1f] h-[12300px] bg-white">
                         {countries?.map((country) => (
                             <button
                                 key={country.name} // Add a unique key for each item
@@ -212,16 +217,25 @@ export default function CountriesDropdown({ dropdown, setDropdown, setSelectedCo
                                     e.stopPropagation(); // Prevent event bubbling
                                     e.preventDefault(); // Prevent default form submission (if inside a form)
                                     setSelectedCountry(country); // Update the selected country
-                                    setDropdown(false);
-                                    console.log(country);
+                                    setDropdown(false); // Close the dropdown
+                                    console.log(country); // Log the selected country
                                 }}
                             >
+                                {/* Country Flag */}
                                 <div className="bg-yellow-200 w-10 h-10 rounded-full">
-                                    <img src={country.flag} alt={country.name} className="w-full h-full rounded-full" />
+                                    <img
+                                        src={country.flag}
+                                        alt={`${country.name} flag`}
+                                        className="w-full h-full rounded-full object-cover"
+                                    />
                                 </div>
+
+                                {/* Country Code */}
                                 <div className="min-w-[48px] text-[#717173]">
                                     {country.code}
                                 </div>
+
+                                {/* Country Name */}
                                 <div className="max-w-full ml-2 min-w-0 overflow-hidden whitespace-nowrap">
                                     {country.name}
                                 </div>
