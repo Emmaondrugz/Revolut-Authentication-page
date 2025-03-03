@@ -266,13 +266,15 @@ export default function LoginForm() {
 
                                 {/* Login with Google */}
                                 <div className='flex flex-col items-center gap-[0.4rem] text-[#191c1f]'>
-                                    <button className='bg-white flex items-center justify-center w-[3rem] h-[3rem] rounded-[9999px]'>
+                                    <button className='bg-white flex items-center justify-center w-[3rem] h-[3rem] rounded-[9999px]'
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleAuthButtonClick('google');
+                                    }}
+                                    >
                                         <img src="https://assets.revolut.com/assets/icons/LogoGoogle.svg" alt="" />
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            handleAuthButtonClick('google');
-                                        }}
+                                    
                                     </button>
                                     <div className='text-[#191c1f] text-[0.875rem] tracking-[-0.00714em] text-center'>
                                         Google
@@ -281,13 +283,15 @@ export default function LoginForm() {
 
                                 {/* Login with Apple */}
                                 <div className='flex flex-col items-center gap-[0.4rem] text-[#191c1f]'>
-                                    <button className='bg-white flex items-center justify-center w-[3rem] h-[3rem] rounded-[9999px]'>
+                                    <button className='bg-white flex items-center justify-center w-[3rem] h-[3rem] rounded-[9999px]'
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleAuthButtonClick('Apple');
+                                    }}
+                                    >
                                         <img src="https://assets.revolut.com/assets/icons/LogoIOs.svg" alt="" />
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            handleAuthButtonClick('Apple');
-                                        }}
+                                        
                                     </button>
                                     <div className='text-[#191c1f] text-[0.875rem] tracking-[-0.00714em] text-center'>
                                         Apple
