@@ -108,7 +108,7 @@ export default function LoginForm() {
     return (
         <div className="bg-[#f7f7f7] text-black w-full h-screen flex flex-col">
             <Header />
-            <div className="flex flex-grow p-4 md:p-2 h-full justify-center items-center ">
+            <div className="flex flex-grow p-[30px] md:p-2 md:mb-[40px] mb-[50px] h-full justify-center items-center ">
                 <div className="min-h-[514px] md:mt-[45px] md:ml-[-3px] form-container w-full max-w-[360px] flex flex-col">
                     {/* Header */}
                     <div className="w-full">
@@ -133,7 +133,7 @@ export default function LoginForm() {
                                     {form === 'Phone' ? (
                                         <div className='overflow-hidden h-[56px] gap-x-2 flex w-full rounded-[1rem] caret-[#4f55f1] text-[#717173]'>
                                             {/* Country Code Selector */}
-                                            <div className='md:w-[140px] w-[200px]'>
+                                            <div className='w-[140px]'>
                                                 <div
                                                     className='flex cursor-pointer dropdown-button gap-x-2 items-center p-[16px] flex-row hover:bg-gray-200 bg-[#ebebf0] h-full rounded-2xl'
                                                     onClick={DisplayDropdown}
@@ -287,7 +287,7 @@ export default function LoginForm() {
             </div >
 
             {/* footer */}
-            < div className='h-[68px] px-[2rem] md:pb-[10px] flex justify-center md:justify-start items-start bg-[#f7f7f7]' >
+            < div className='h-[68px] px-[2rem] mx-auto md:mx-0 md:max-w-[839px] w-full md:pb-[10px] md:relative absolute bottom-0 flex justify-center md:justify-start items-start bg-[#f7f7f7]' >
                 <div className="h-fit md:absolute bottom-[19px] left-[30px] gap-y-2 gap-x-8 items-center justify-center md:justify-start md:flex-row flex-col flex">
                     <button className='text-[#717173] tracking-[0.0009px] items-center gap-x-[9px] rounded-[0.75rem] flex justify-center text-sm'>
                         English (United States)

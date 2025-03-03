@@ -5,19 +5,36 @@ export default function CountriesDropdown({ dropdown, setDropdown, setSelectedCo
     // Handle the visibility of the dropdown with a smooth transition
     const [isVisible, setIsVisible] = useState(false);
 
+    // Hanlde overlay visibility for mobile devices
+    const [overlay, setOverlay] = useState(false);
+
     // Ref for the dropdown container to detect clicks outside
     const dropdownRef = useRef(null);
 
     // Sync the visibility state with the dropdown prop
     useEffect(() => {
         if (dropdown) {
-            setIsVisible(true); // Show the dropdown
+            if (window.innerWidth < 768) {
+                setOverlay('block');
+                // Delay showing the dropdown content
+                const timeout = setTimeout(() => {
+                    setIsVisible(true);
+                }, 50);
+                return () => clearTimeout(timeout);
+            } else {
+                setIsVisible(true);
+            }
         } else {
-            // Delay hiding the dropdown to allow the transition to complete
-            const timeout = setTimeout(() => {
+            if (window.innerWidth < 768) {
                 setIsVisible(false);
-            }, 300); // Match this duration with your CSS transition duration
-            return () => clearTimeout(timeout); // Cleanup timeout
+                // Delay hiding the overlay
+                const timeout = setTimeout(() => {
+                    setOverlay('hidden');
+                }, 400);
+                return () => clearTimeout(timeout);
+            } else {
+                setIsVisible(false);
+            }
         }
     }, [dropdown]);
 
@@ -156,12 +173,9 @@ export default function CountriesDropdown({ dropdown, setDropdown, setSelectedCo
 
 
 
-
-
-
             {/* Mobile Version */}
-            <div className={`overlay z-50 fixed ${dropdown ? 'block md:hidden' : 'hidden'} flex justify-center items-end sm:items-start top-0 left-0 bg-black bg-opacity-30 w-full h-screen`}>
-                <div className={`mt-[60px] gap-y-[1rem] justify-between bg-[#f7f7f7] sm:max-h-[640px] sm:mb-10 rounded-[1.5rem] p-[1.5rem] z-50 relative overflow-auto transition-all duration-300 ${isVisible ? "opacity-100 visible translate-y-[4px]" : "opacity-0 invisible -translate-y-[4px]"} z-50 sm:rounded-2xl rounded-t-2xl rounded-b-none sm:rounded-b-2xl sm:max-w-[390px] w-full h-full shadow-sm block`}>
+            <div className={`overlay z-50 fixed ${overlay === 'block' ? 'block md:hidden' : 'hidden'} flex justify-center items-end sm:items-start top-0 left-0 bg-black bg-opacity-30 w-full h-screen`}>
+                <div className={`gap-y-[1rem] justify-between bg-[#f7f7f7] sm:max-h-[640px] sm:mb-10 rounded-[3rem] md:rounded-[1.7rem] p-[1rem] md:p-[1.5rem] z-50 relative overflow-hidden transition-all duration-300 ${isVisible ? "opacity-100 visible translate-y-[45px]" : "opacity-0 invisible translate-y-[200px]"} z-50 sm:rounded-2xl rounded-t-2xl rounded-b-none sm:rounded-b-2xl sm:max-w-[390px] w-full h-full shadow-sm block`}>
                     {/* Dropdown header */}
                     <div className="w-full border-[#f7f7f7] bg-[#f7f7f7] flex items-center gap-2">
 
@@ -180,13 +194,16 @@ export default function CountriesDropdown({ dropdown, setDropdown, setSelectedCo
                                 className="flex-1 placeholder:text-[opacity-40] placeholder:text-[14px] bg-[#ebebf2] focus:outline-none caret-black" />
                         </div>
 
-                        <div className="text-[#4f55f1] w-[max-contetnt] items-center font-normal text-[0.875rem] tracking-[-0.00714em]">
+                        <div
+                            className="text-[#4f55f1] w-[max-contetnt] items-center font-normal text-[0.875rem] tracking-[-0.00714em]"
+                            onClick={() => setDropdown(false)}
+                        >
                             Cancel
                         </div>
                     </div>
 
                     {/* Countries */}
-                    <div className="relative p-1 mt-5 rounded-2xl block text-[#191c1f] h-[12144px] bg-white">
+                    <div className="relative p-1 mt-5 overflow-auto rounded-2xl block text-[#191c1f] h-[12144px] bg-white">
                         {countries?.map((country) => (
                             <button
                                 key={country.name} // Add a unique key for each item
@@ -212,7 +229,7 @@ export default function CountriesDropdown({ dropdown, setDropdown, setSelectedCo
                         ))}
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 }
