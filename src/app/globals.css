@@ -169,6 +169,16 @@ input[type="number"] {
   animation: googleLoader 2s infinite ease-in-out;
   transform-origin: left;
 }
+
+@keyframes subtleBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.animate-subtleBounce {
+  animation: subtleBounce 1.5s ease-in-out infinite;
+}
+
 /* Enhanced Mobile-First Styling */
 @layer components {
   /* Base Container Styles */
