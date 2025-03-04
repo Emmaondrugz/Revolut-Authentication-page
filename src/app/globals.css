@@ -169,96 +169,140 @@ input[type="number"] {
   animation: googleLoader 2s infinite ease-in-out;
   transform-origin: left;
 }
-
-@keyframes googleLoader {
-  0% {
-    transform: translateX(-100%);
-  }
-  50% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(300%);
-  }
-}
-
-.google-loader {
-  height: 4px;
-  background: #ddd;
-  position: relative;
-  overflow: hidden;
-}
-
-.google-loader::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background: #4285f4;
-  animation: loader 2s linear infinite;
-}
-
-@keyframes loader {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
-}
-
+/* Enhanced Mobile-First Styling */
 @layer components {
-  /* Responsive container for the form */
+  /* Base Container Styles */
   .responsive-form-container {
-      @apply w-full max-w-[480px] lg:max-w-[965px] mx-auto px-4 sm:px-6 lg:px-8;
+    @apply w-full max-w-[95%] md:max-w-[90%] lg:max-w-[965px] mx-auto px-4 sm:px-6 lg:px-8;
+    min-height: calc(100vh - 128px);
   }
 
-  /* Responsive grid for the form layout */
+  /* Grid System */
   .responsive-form-grid {
-      @apply grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8;
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-8;
   }
 
-  /* Responsive padding for form sections */
-  .responsive-form-padding {
-      @apply py-6 sm:py-8 lg:py-12;
-  }
-
-  /* Responsive input fields */
-  .responsive-input {
-      @apply w-full p-3 sm:p-4 text-base sm:text-lg;
-  }
-
-  /* Responsive button */
-  .responsive-button {
-      @apply w-full sm:w-auto px-6 py-2.5 text-sm sm:text-base;
-  }
-
-  /* Responsive footer */
-  .responsive-footer {
-      @apply flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6;
-  }
-
-  /* Responsive text sizes */
-  .responsive-text {
-      @apply text-sm sm:text-base;
-  }
-
-  /* Responsive header */
+  /* Typography Enhancements */
   .responsive-header {
-      @apply text-xl sm:text-2xl lg:text-3xl;
+    @apply text-2xl sm:text-3xl lg:text-4xl font-medium text-gray-800 tracking-tight;
   }
 
-  /* Responsive spacing for form elements */
-  .responsive-spacing {
-      @apply space-y-4 sm:space-y-6;
+  .responsive-text {
+    @apply text-sm sm:text-base text-gray-600 leading-relaxed;
   }
 
-  /* Responsive loader */
-  .responsive-loader {
-      @apply w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20;
+  /* Input Field Enhancements */
+  .responsive-input {
+    @apply w-full p-4 text-base border-2 rounded-lg transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+  }
+
+  /* Button Enhancements */
+  .responsive-button {
+    @apply w-full sm:w-auto px-8 py-3.5 rounded-full font-medium transition-all duration-200;
+    @apply hover:transform hover:scale-105 active:scale-95;
+  }
+
+  /* Verification Number Display */
+  .verification-number {
+    @apply text-5xl sm:text-6xl font-bold text-blue-600 animate-pulse;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* OTP Input Specific Styles */
+  .otp-input {
+    @apply w-full p-4 text-2xl text-center border-2 rounded-lg;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+  }
+
+  /* Mobile-Specific Adjustments */
+  @media (max-width: 640px) {
+    .responsive-form-container {
+      @apply px-3;
+    }
+
+    .responsive-header {
+      @apply text-xl;
+    }
+
+    .responsive-button {
+      @apply py-3 text-sm;
+    }
+
+    .verification-number {
+      @apply text-4xl;
+    }
+  }
+
+  /* Animation Enhancements */
+  @keyframes subtleBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  /* Loader Improvements */
+  .google-loader {
+    @apply h-1.5 bg-gray-200 overflow-hidden rounded-full;
+  }
+
+  .google-loader::before {
+    @apply absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600;
+    content: '';
+    animation: loader 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  /* 2-Step Verification Section */
+  .verification-container {
+    @apply p-6 sm:p-8 space-y-6 text-center;
+    @apply bg-gradient-to-b from-blue-50 to-white rounded-2xl shadow-lg;
+  }
+
+  /* MFA Section Styling */
+  .mfa-container {
+    @apply p-8 space-y-8 text-center bg-white rounded-2xl shadow-xl;
+  }
+
+  .phone-icon {
+    @apply p-6 bg-blue-100 rounded-full animate-subtleBounce;
+    box-shadow: 0 4px 6px rgba(66, 133, 244, 0.1);
+  }
+
+  /* Footer Adjustments */
+  .responsive-footer {
+    @apply flex flex-col-reverse sm:flex-row justify-between items-center gap-4;
+    @apply py-4 border-t border-gray-200 mt-8;
   }
 }
 
+/* Enhanced Loader Animation */
+@keyframes loader {
+  0% { transform: translateX(-100%) scaleX(0); }
+  50% { transform: translateX(30%) scaleX(1.2); }
+  100% { transform: translateX(100%) scaleX(0); }
+}
 
+/* Hover Effects */
+.button-hover {
+  @apply transition-transform duration-200 hover:-translate-y-0.5;
+}
 
+/* Mobile Menu Transitions */
+.mobile-menu {
+  @apply transition-all duration-300 ease-out;
+}
 
+/* Card Shadows */
+.card-shadow {
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
 
-
-
+/* Responsive Padding Utilities */
+@responsive {
+  .responsive-py {
+    @apply py-8 sm:py-12 lg:py-16;
+  }
+  
+  .responsive-px {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+}
