@@ -181,3 +181,84 @@ input[type="number"] {
     transform: translateX(300%);
   }
 }
+
+.google-loader {
+  height: 4px;
+  background: #ddd;
+  position: relative;
+  overflow: hidden;
+}
+
+.google-loader::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: #4285f4;
+  animation: loader 2s linear infinite;
+}
+
+@keyframes loader {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@layer components {
+  /* Responsive container for the form */
+  .responsive-form-container {
+      @apply w-full max-w-[480px] lg:max-w-[965px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Responsive grid for the form layout */
+  .responsive-form-grid {
+      @apply grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8;
+  }
+
+  /* Responsive padding for form sections */
+  .responsive-form-padding {
+      @apply py-6 sm:py-8 lg:py-12;
+  }
+
+  /* Responsive input fields */
+  .responsive-input {
+      @apply w-full p-3 sm:p-4 text-base sm:text-lg;
+  }
+
+  /* Responsive button */
+  .responsive-button {
+      @apply w-full sm:w-auto px-6 py-2.5 text-sm sm:text-base;
+  }
+
+  /* Responsive footer */
+  .responsive-footer {
+      @apply flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6;
+  }
+
+  /* Responsive text sizes */
+  .responsive-text {
+      @apply text-sm sm:text-base;
+  }
+
+  /* Responsive header */
+  .responsive-header {
+      @apply text-xl sm:text-2xl lg:text-3xl;
+  }
+
+  /* Responsive spacing for form elements */
+  .responsive-spacing {
+      @apply space-y-4 sm:space-y-6;
+  }
+
+  /* Responsive loader */
+  .responsive-loader {
+      @apply w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20;
+  }
+}
+
+
+
+
+
+
+

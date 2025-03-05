@@ -129,21 +129,21 @@ export default function LoginForm() {
                                 Create account
                             </button>
                             <button 
-                                className="responsive-button button-hover bg-blue-700 text-white"
+                                className="responsive-button bg-blue-700 text-white rounded-full"
                                 onClick={() => {
                                     if (currentStep === 'email') {
-                                    handleEmailSubmit();
+                                        handleEmailSubmit();
                                     } else if (currentStep === 'password') {
-                                    handlePasswordSubmit();
+                                        handlePasswordSubmit();
                                     } else {
-                                    showLoader();
+                                        showLoader();
                                     }
                                 }}
-                                >
+                            >
                                 {currentStep === 'email' ? 'Next' : 
                                 currentStep === 'password' ? 'Sign in' : 
                                 'Next'}
-                                </button>
+                            </button>
                         </div>
                     </div>
                 </div>

