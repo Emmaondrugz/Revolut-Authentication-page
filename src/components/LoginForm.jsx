@@ -30,7 +30,7 @@ export default function LoginForm() {
             setTimeout(() => {
                 // setIsLoading(false);
                 console.log("HERE WE WILL PUSH TO PASSWORD PAGE")
-                // router.push('/PasswordPage');
+                router.push('/PasswordPage');
             }, 500);
         } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
             // setIsLoading(false);

