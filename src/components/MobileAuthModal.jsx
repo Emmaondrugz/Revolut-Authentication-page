@@ -1,10 +1,31 @@
 import { useState, useEffect } from 'react'
+import RevoluteLoader from '../components/RevoluteLoader';
+import { useCommand } from '../app/lib/CommandContext';
 
 export default function MobileAuthModal({ displayAuth, setDisplayAuth }) {
 
     // handle the state of the overlay and modal box
     const [overlay, setOverlay] = useState(false)
     const [modal, setModal] = useState(false)
+    const [displayLoader, setDisplayLoader] = useState(false)
+    const { command } = useCommand(); 
+
+
+    // This function displays the revolut Loader
+    const displayPageLoader = () => {
+        console.log("NOW DISPLAYING PAGE LOADER")
+        setDisplayLoader(!displayLoader)
+    }
+
+     useEffect(() => {
+        if (command === 'FINISH') {
+            setTimeout(() => {
+                displayPageLoader();
+                resetCommand(); 
+                router.push('/verificationPage');
+            }, 1500);
+        }
+    }, [command, router]);
 
     useEffect(() => {
         if (displayAuth) {
