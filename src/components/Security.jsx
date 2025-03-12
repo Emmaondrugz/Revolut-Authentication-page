@@ -56,7 +56,7 @@ export default function Security() {
     // Handle input for mobile viewport
     const handleMobileInput = (number) => {
         if (pins.length < 6) {
-            const new_pins = prev => prev + number 
+            const new_pins = prev + number 
             setPins(new_pins);
             console.log("new pins is ", new_pins)
             if (pins.length + 1 === 6) {
