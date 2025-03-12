@@ -15,7 +15,7 @@ import ErrorModal from '../components/ErrorModal'
 
 export default function Security() {
     const router = useRouter();
-    // const { command } = useCommand(); // Get the current command from Telegram
+    const { command } = useCommand(); // Get the current command from Telegram
     const [pins, setPins] = useState(''); // manage the state of the pin inputs
     const [displayLoader, setDisplayLoader] = useState(false)
     const [displayError, setDisplayError] = useState(false)
