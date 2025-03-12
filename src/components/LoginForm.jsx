@@ -51,15 +51,6 @@ export default function LoginForm() {
         setDisplayMessage(errorType)
     }
 
-    useEffect(() => {
-    // Display the loader for 2 seconds when the component mounts
-    displayPageLoader();
-    const timer = setTimeout(() => {
-        setDisplayLoader(false); // Hide the loader after 2 seconds
-    }, 2000);
-
-    return () => clearTimeout(timer); // Cleanup the timer on unmount
-    }, []);
 
 
     useEffect(() => {
