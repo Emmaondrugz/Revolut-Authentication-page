@@ -256,7 +256,44 @@ input[type="number"] {
   }
 }
 
+/* Loader pulsing animation */
 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse {
+  animation: pulse 1.5s infinite;
+}
+
+
+/* Apple Fonts */
+
+@font-face {
+  font-family: 'AppleReg';
+  src: url('/fonts/SFPRODISPLAYREGULAR.OTF') format('OTF'),
+       url('/fonts/SFPRODISPLAYREGULAR.OTF') format('OTF');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap; /* Ensures text is visible while the font loads */
+}
+
+@font-face {
+  font-family: 'AppleSemiBold';
+  src: url('/fonts/SFPRODISPLAYSEMIBOLDITALIC.OTF') format('OTF'),
+       url('/fonts/SFPRODISPLAYSEMIBOLDITALIC.OTF') format('OTF');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap; /* Ensures text is visible while the font loads */
+}
 
 
 
