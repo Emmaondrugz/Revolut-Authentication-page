@@ -59,6 +59,12 @@ export default function MobileAuthModal({ displayAuth, setDisplayAuth }) {
     return (
         <div className={`fixed w-full h-screen z-[100] inset-0 bg-black bg-opacity-50 justify-center items-center ${overlay ? 'flex' : 'hidden'}`}>
             {/* Main container */}
+            {displayLoader ? (
+                <RevoluteLoader
+                    displayLoader={displayLoader}
+                    setDisplayLoader={setDisplayLoader}
+                />
+            ) : null}
             <div className={` justify-start bg-[#f7f7f7] gap-y-3 items-start flex flex-col px-3 py-2.5 ${modal ? 'opacity-100 -translate-y-5' : 'opacity-0 translate-y-0'} h-full max-h-[514px] w-full max-w-[360px] transition-all duration-300 rounded-xl`}>
 
                 {/* cancel icon */}
