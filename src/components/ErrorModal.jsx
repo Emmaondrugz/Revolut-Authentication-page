@@ -66,7 +66,7 @@ export default function ErrorModal({ displayError, setDisplayError, displayMessa
 
                 {/* Text container */}
                 <div className="text-center font-medium w-full text-sm px-5">
-                    {displayMessage === 'phone' ? `Incorrect passcode or phone number ${phoneNumber}` : `Incorrect passcode or Email Address`}
+                    {displayMessage === 'phone' ? `Incorrect passcode or phone number` : `Incorrect passcode or Email Address`}
                 </div>
 
                 {/* cancel button */}
