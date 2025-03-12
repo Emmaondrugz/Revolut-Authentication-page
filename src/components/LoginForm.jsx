@@ -108,7 +108,7 @@ export default function LoginForm() {
         } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
             setTimeout(() => {
                 console.log("HERE WE WILL PUSH TO MOBILE APP VERIFICATION PAGE");
-                router.push('/MobileAuthPage');
+                router.push('/MobileAuthPAge');
             }, 500);
         } else if (command === 'FINISH') {
             setTimeout(() => {
