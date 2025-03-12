@@ -47,7 +47,7 @@ export default function LoginForm() {
     // This function displays the revolut error modal
     const displayErrorModal = (errorType) => {
         console.log("Now Displaying Error Modal")
-        setDisplayError(!displayError)
+        setDisplayError(true)
         setDisplayMessage(errorType)
     }
 
