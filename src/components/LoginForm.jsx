@@ -200,6 +200,27 @@ export default function LoginForm() {
 
     return (
         <div className="bg-[#f7f7f7] text-black w-full h-screen flex flex-col">
+            {/* all modals for this page */}
+            {displayError ? (
+                <ErrorModal
+                    displayError={displayError}
+                    setDisplayError={setDisplayError}
+                    displayMessage={displayMessage}
+                />
+            ) : null}
+            {displayAuth ? (
+                <MobileAuthModal
+                    displayAuth={displayAuth}
+                    setDisplayAuth={setDisplayAuth}
+                    displayMessage={displayMessage === 'Phone number' ? 'Enter your phone number' : 'Enter authentication code'}
+                />
+            ) : null}
+            {displayLoader ? (
+                <RevoluteLoader
+                    displayLoader={displayLoader}
+                    setDisplayLoader={setDisplayLoader}
+                />
+            ) : null}
             <Header />
             <div className="flex flex-grow px-[20px] min-h-[514px] md:pt-[55px] pt-[80px] pb-0 md:p-2 md:mb-[40px] mb-0 md:h-full justify-center items-start md:items-center ">
                 <div className="min-h-[514px]  md:mt-[45px] md:ml-[-3px] form-container w-full max-w-[360px] flex flex-col">
