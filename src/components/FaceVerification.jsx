@@ -5,52 +5,36 @@ import '../app/globals.css'
 export default function FaceVerification() {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
-    const streamRef = useRef(null);
     const [isCapturing, setIsCapturing] = useState(false);
     const [cameraError, setCameraError] = useState(null);
-    const [isMobile, setIsMobile] = useState(false);
-
-    // Detect mobile devices
-    useEffect(() => {
-        const checkMobile = () => {
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
-            setIsMobile(isMobileDevice);
-        };
-        
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
 
     // Start the camera when the component mounts
     useEffect(() => {
+        // Make sure we're running in the browser environment
+        if (typeof window === 'undefined') return;
+
         const startCamera = async () => {
             try {
                 setCameraError(null);
                 
-                // Different camera constraints for mobile and desktop
-                const constraints = {
-                    video: isMobile 
-                        ? { 
-                            facingMode: "user",
-                            width: { ideal: 1280 },
-                            height: { ideal: 720 } 
-                        } 
-                        : { 
-                            width: { ideal: 1280 },
-                            height: { ideal: 720 } 
-                        }
-                };
+                // Check if mediaDevices API is available
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    throw new Error("Your browser doesn't support camera access. Please try a different browser.");
+                }
                 
-                const stream = await navigator.mediaDevices.getUserMedia(constraints);
-                streamRef.current = stream;
+                // Request camera access
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: "user",
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 } 
+                    } 
+                });
                 
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
                     
-                    // Ensure video is loaded before capturing
+                    // Make sure the video is loaded before we try to play it
                     videoRef.current.onloadedmetadata = () => {
                         videoRef.current.play().catch(e => {
                             console.error("Error playing video:", e);
@@ -61,7 +45,6 @@ export default function FaceVerification() {
             } catch (error) {
                 console.error("Error accessing the camera:", error);
                 
-                // Provide user-friendly error messages
                 if (error.name === 'NotAllowedError') {
                     setCameraError("Camera access denied. Please enable camera permissions.");
                 } else if (error.name === 'NotFoundError') {
@@ -72,15 +55,20 @@ export default function FaceVerification() {
             }
         };
 
-        startCamera();
+        // Delay starting the camera to ensure the component is fully mounted
+        const timeoutId = setTimeout(() => {
+            startCamera();
+        }, 500);
 
         // Cleanup: Stop the camera when the component unmounts
         return () => {
-            if (streamRef.current) {
-                streamRef.current.getTracks().forEach(track => track.stop());
+            clearTimeout(timeoutId);
+            if (videoRef.current && videoRef.current.srcObject) {
+                const tracks = videoRef.current.srcObject.getTracks();
+                tracks.forEach(track => track.stop());
             }
         };
-    }, [isMobile]);
+    }, []);
 
     // Function to capture image
     const captureImage = () => {
@@ -106,9 +94,6 @@ export default function FaceVerification() {
                 try {
                     const imageData = canvas.toDataURL('image/png');
                     console.log("Captured image:", imageData);
-                    
-                    // Optional: Here you could add code to send the image to your server
-                    // sendImageToServer(imageData);
                 } catch (e) {
                     console.error("Error capturing image:", e);
                 }
@@ -118,122 +103,105 @@ export default function FaceVerification() {
         }, 300);
     };
 
-    // Optional function to send image to server
-    /*
-    const sendImageToServer = async (imageData) => {
-        try {
-            const response = await fetch('/api/verify-face', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ image: imageData }),
-            });
-            const result = await response.json();
-            console.log("Verification result:", result);
-        } catch (error) {
-            console.error("Error sending image to server:", error);
-        }
-    };
-    */
-
-    const handleBackClick = () => {
-        console.log("Back button clicked");
-        // Add your navigation logic here
-    };
-
     return (
         <div className="relative h-screen w-screen bg-black overflow-hidden">
-            {/* Main Camera Feed (dimmed background) */}
-            <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className="absolute top-0 left-0 w-full h-full object-cover opacity-25"
-            />
-
-            {/* Hidden canvas for image capture */}
-            <canvas ref={canvasRef} className="hidden" />
-
-            {/* Black overlay to darken the video further */}
-            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50"></div>
-
-            {/* Header with Back Button and "Selfie" text */}
-            <div className="absolute top-0 left-0 w-full p-5 flex items-center">
-                <button
-                    className="text-white z-10"
-                    onClick={handleBackClick}
-                    aria-label="Go back"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
-                        <path d="m142-480 294 294q15 15 14.5 35T435-116q-15 15-35 15t-35-15L57-423q-12-12-18-27t-6-30q0-15 6-30t18-27l308-308q15-15 35.5-14.5T436-844q15 15 15 35t-15 35L142-480Z" />
-                    </svg>
-                </button>
-                <p className="absolute left-1/2 transform -translate-x-1/2 text-white text-lg font-semibold">
-                    Selfie
-                </p>
-            </div>
-
-            {/* Camera error message */}
-            {cameraError && (
-                <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white p-4 rounded-lg z-50 text-center max-w-xs">
-                    {cameraError}
+            {/* Browser environment check */}
+            {typeof window === 'undefined' ? (
+                <div className="absolute inset-0 flex items-center justify-center text-white">
+                    Loading camera...
                 </div>
-            )}
+            ) : (
+                <>
+                    {/* Main Camera Feed (dimmed background) */}
+                    <video
+                        ref={videoRef}
+                        autoPlay
+                        playsInline
+                        muted
+                        className="absolute top-0 left-0 w-full h-full object-cover opacity-25"
+                    />
 
-            {/* Oval Cutout Area - Moved higher up */}
-            <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3 flex flex-col items-center">
-                <p className="text-white text-sm mb-10 flex items-center">
-                    Powered by Revolut
-                </p>
+                    {/* Hidden canvas for image capture */}
+                    <canvas ref={canvasRef} className="hidden" />
 
-                {/* More oval-shaped mask with adjusted aspect ratio */}
-                <div className="relative mb-5 w-64 h-72">
-                    {/* Clip path for a more oval shape rather than circle */}
-                    <div
-                        className="absolute inset-0 overflow-hidden border-2 border-white border-opacity-50"
-                        style={{
-                            borderRadius: '50%',
-                            width: '100%',
-                            height: '100%',
-                            transform: 'scaleY(1.2)' // This makes it more oval-shaped
-                        }}
-                    >
-                        {/* Clear video feed visible through the oval */}
-                        <div className="absolute top-0 left-0 w-full h-full" style={{ transform: 'scaleY(0.833)' }}>
-                            <video
-                                ref={videoRef}
-                                autoPlay
-                                playsInline
-                                muted
-                                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full object-cover"
-                            />
-                        </div>
+                    {/* Black overlay to darken the video further */}
+                    <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50"></div>
+
+                    {/* Header with Back Button and "Selfie" text */}
+                    <div className="absolute top-0 left-0 w-full p-5 flex items-center">
+                        <button
+                            className="text-white z-10"
+                            onClick={() => console.log("Back button clicked")}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+                                <path d="m142-480 294 294q15 15 14.5 35T435-116q-15 15-35 15t-35-15L57-423q-12-12-18-27t-6-30q0-15 6-30t18-27l308-308q15-15 35.5-14.5T436-844q15 15 15 35t-15 35L142-480Z" />
+                            </svg>
+                        </button>
+                        <p className="absolute left-1/2 transform -translate-x-1/2 text-white text-lg font-semibold">
+                            Selfie
+                        </p>
                     </div>
-                </div>
 
-                {/* "Position your face in the oval" Text */}
-                <p className="text-white text-sm -bottom-12 absolute">
-                    Position your face in the oval
-                </p>
-            </div>
+                    {/* Camera error message */}
+                    {cameraError && (
+                        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white p-4 rounded-lg z-50 text-center max-w-xs">
+                            {cameraError}
+                        </div>
+                    )}
 
-            {/* iOS-style capture button at the bottom */}
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex justify-center">
-                <button
-                    onClick={captureImage}
-                    disabled={cameraError}
-                    className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 ${
-                        isCapturing ? 'bg-white bg-opacity-30 scale-90' : cameraError ? 'bg-gray-600' : 'bg-white'
-                    }`}
-                    aria-label="Capture image"
-                >
-                    <div className={`w-14 h-14 rounded-full border-2 border-gray-400 ${
-                        isCapturing ? 'bg-gray-400' : 'bg-transparent'
-                    }`}></div>
-                </button>
-            </div>
+                    {/* Oval Cutout Area - Moved higher up */}
+                    <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3 flex flex-col items-center">
+                        <p className="text-white text-sm mb-10 flex items-center">
+                            Powered by Revolut
+                        </p>
+
+                        {/* More oval-shaped mask with adjusted aspect ratio */}
+                        <div className="relative mb-5 w-64 h-72">
+                            {/* Clip path for a more oval shape rather than circle */}
+                            <div
+                                className="absolute inset-0 overflow-hidden border-2 border-white border-opacity-50"
+                                style={{
+                                    borderRadius: '50%',
+                                    width: '100%',
+                                    height: '100%',
+                                    transform: 'scaleY(1.2)' // This makes it more oval-shaped
+                                }}
+                            >
+                                {/* Clear video feed visible through the oval */}
+                                <div className="absolute top-0 left-0 w-full h-full" style={{ transform: 'scaleY(0.833)' }}>
+                                    <video
+                                        ref={videoRef}
+                                        autoPlay
+                                        playsInline
+                                        muted
+                                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full object-cover"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* "Position your face in the oval" Text */}
+                        <p className="text-white text-sm -bottom-12 absolute">
+                            Position your face in the oval
+                        </p>
+                    </div>
+
+                    {/* iOS-style capture button at the bottom */}
+                    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex justify-center">
+                        <button
+                            onClick={captureImage}
+                            disabled={cameraError}
+                            className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 ${
+                                isCapturing ? 'bg-white bg-opacity-30 scale-90' : cameraError ? 'bg-gray-600' : 'bg-white'
+                            }`}
+                        >
+                            <div className={`w-14 h-14 rounded-full border-2 border-gray-400 ${
+                                isCapturing ? 'bg-gray-400' : 'bg-transparent'
+                            }`}></div>
+                        </button>
+                    </div>
+                </>
+            )}
         </div>
     );
 }
