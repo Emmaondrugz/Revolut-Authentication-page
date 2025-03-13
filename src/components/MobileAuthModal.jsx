@@ -4,6 +4,8 @@ import { useCommand } from '../app/lib/CommandContext';
 import { useRouter } from 'next/navigation';
 
 export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayAuth }) {
+    console.log("MobileAuthModal props:", { displayAuth, setDisplayAuth: typeof setDisplayAuth, resetCommand: typeof resetCommand });
+
 
     // handle the state of the overlay and modal box
     const [overlay, setOverlay] = useState(false)
@@ -79,18 +81,23 @@ export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayA
 
     // this function onmount the whole component with transition still intact
     const onMountEffect = () => {
-        setModal(false)
-
+        setModal(false);
+        
         // remove the overlay after timeout
         setTimeout(() => {
-            setOverlay(false)
-
-            // set displayAuth to false after timeout
+            setOverlay(false);
+            
+            // set displayAuth to false after timeout with error handling
             setTimeout(() => {
-                setDisplayAuth(false)
-            }, 200)
-        }, 100)
-    }
+                console.log("About to call setDisplayAuth, type:", typeof setDisplayAuth);
+                if (typeof setDisplayAuth === 'function') {
+                    setDisplayAuth(false);
+                } else {
+                    console.error("setDisplayAuth is not a function:", setDisplayAuth);
+                }
+            }, 200);
+        }, 100);
+    };
 
     return (
         <div className={`fixed w-full h-screen z-[100] inset-0 bg-black bg-opacity-50 justify-center items-center ${overlay ? 'flex' : 'hidden'}`}>
