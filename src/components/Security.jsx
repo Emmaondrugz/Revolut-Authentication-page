@@ -216,7 +216,7 @@ export default function Security() {
     // };
 
 
-
+    console.log("MobileAuthModal props:", { displayAuth, setDisplayAuth: typeof setDisplayAuth, resetCommand: typeof resetCommand });
 
     return (
         <div className="bg-[#f7f7f7] text-black w-full h-screen flex flex-col">
