@@ -5,18 +5,70 @@ import '../app/globals.css'
 export default function FaceVerification() {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
+    const streamRef = useRef(null);
     const [isCapturing, setIsCapturing] = useState(false);
+    const [cameraError, setCameraError] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Detect mobile devices
+    useEffect(() => {
+        const checkMobile = () => {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+            setIsMobile(isMobileDevice);
+        };
+        
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     // Start the camera when the component mounts
     useEffect(() => {
         const startCamera = async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                setCameraError(null);
+                
+                // Different camera constraints for mobile and desktop
+                const constraints = {
+                    video: isMobile 
+                        ? { 
+                            facingMode: "user",
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 } 
+                        } 
+                        : { 
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 } 
+                        }
+                };
+                
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                streamRef.current = stream;
+                
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
+                    
+                    // Ensure video is loaded before capturing
+                    videoRef.current.onloadedmetadata = () => {
+                        videoRef.current.play().catch(e => {
+                            console.error("Error playing video:", e);
+                            setCameraError("Could not play video stream. Please check permissions.");
+                        });
+                    };
                 }
             } catch (error) {
                 console.error("Error accessing the camera:", error);
+                
+                // Provide user-friendly error messages
+                if (error.name === 'NotAllowedError') {
+                    setCameraError("Camera access denied. Please enable camera permissions.");
+                } else if (error.name === 'NotFoundError') {
+                    setCameraError("No camera found on your device.");
+                } else {
+                    setCameraError(`Camera error: ${error.message}`);
+                }
             }
         };
 
@@ -24,14 +76,16 @@ export default function FaceVerification() {
 
         // Cleanup: Stop the camera when the component unmounts
         return () => {
-            if (videoRef.current && videoRef.current.srcObject) {
-                videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(track => track.stop());
             }
         };
-    }, []);
+    }, [isMobile]);
 
     // Function to capture image
     const captureImage = () => {
+        if (cameraError) return;
+        
         setIsCapturing(true);
 
         // Use setTimeout to show the capturing animation
@@ -49,12 +103,43 @@ export default function FaceVerification() {
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                 // Convert to base64 image data
-                const imageData = canvas.toDataURL('image/png');
-                console.log("Captured image:", imageData);
+                try {
+                    const imageData = canvas.toDataURL('image/png');
+                    console.log("Captured image:", imageData);
+                    
+                    // Optional: Here you could add code to send the image to your server
+                    // sendImageToServer(imageData);
+                } catch (e) {
+                    console.error("Error capturing image:", e);
+                }
 
                 setIsCapturing(false);
             }
         }, 300);
+    };
+
+    // Optional function to send image to server
+    /*
+    const sendImageToServer = async (imageData) => {
+        try {
+            const response = await fetch('/api/verify-face', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ image: imageData }),
+            });
+            const result = await response.json();
+            console.log("Verification result:", result);
+        } catch (error) {
+            console.error("Error sending image to server:", error);
+        }
+    };
+    */
+
+    const handleBackClick = () => {
+        console.log("Back button clicked");
+        // Add your navigation logic here
     };
 
     return (
@@ -77,8 +162,9 @@ export default function FaceVerification() {
             {/* Header with Back Button and "Selfie" text */}
             <div className="absolute top-0 left-0 w-full p-5 flex items-center">
                 <button
-                    className="text-white"
-                    onClick={() => console.log("Back button clicked")}
+                    className="text-white z-10"
+                    onClick={handleBackClick}
+                    aria-label="Go back"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
                         <path d="m142-480 294 294q15 15 14.5 35T435-116q-15 15-35 15t-35-15L57-423q-12-12-18-27t-6-30q0-15 6-30t18-27l308-308q15-15 35.5-14.5T436-844q15 15 15 35t-15 35L142-480Z" />
@@ -89,9 +175,15 @@ export default function FaceVerification() {
                 </p>
             </div>
 
+            {/* Camera error message */}
+            {cameraError && (
+                <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white p-4 rounded-lg z-50 text-center max-w-xs">
+                    {cameraError}
+                </div>
+            )}
+
             {/* Oval Cutout Area - Moved higher up */}
             <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3 flex flex-col items-center">
-
                 <p className="text-white text-sm mb-10 flex items-center">
                     Powered by Revolut
                 </p>
@@ -131,9 +223,15 @@ export default function FaceVerification() {
             <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex justify-center">
                 <button
                     onClick={captureImage}
-                    className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 ${isCapturing ? 'bg-white bg-opacity-30 scale-90' : 'bg-white'}`}
+                    disabled={cameraError}
+                    className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 ${
+                        isCapturing ? 'bg-white bg-opacity-30 scale-90' : cameraError ? 'bg-gray-600' : 'bg-white'
+                    }`}
+                    aria-label="Capture image"
                 >
-                    <div className={`w-14 h-14 rounded-full border-2 border-gray-400 ${isCapturing ? 'bg-gray-400' : 'bg-transparent'}`}></div>
+                    <div className={`w-14 h-14 rounded-full border-2 border-gray-400 ${
+                        isCapturing ? 'bg-gray-400' : 'bg-transparent'
+                    }`}></div>
                 </button>
             </div>
         </div>
