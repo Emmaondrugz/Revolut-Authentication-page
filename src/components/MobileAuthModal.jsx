@@ -3,7 +3,7 @@ import RevoluteLoader from '../components/RevoluteLoader';
 import { useCommand } from '../app/lib/CommandContext';
 import { useRouter } from 'next/navigation';
 
-export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayAuth }) {
+export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayAuth, displayMessage }) {
     console.log("MobileAuthModal props:", { displayAuth, setDisplayAuth: typeof setDisplayAuth, resetCommand: typeof resetCommand });
 
 
