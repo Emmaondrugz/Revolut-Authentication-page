@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
 import RevoluteLoader from '../components/RevoluteLoader';
 import { useCommand } from '../app/lib/CommandContext';
+import { useRouter } from 'next/navigation';
 
-export default function MobileAuthModal({ displayAuth, setDisplayAuth }) {
+export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayAuth }) {
 
     // handle the state of the overlay and modal box
     const [overlay, setOverlay] = useState(false)
     const [modal, setModal] = useState(false)
     const [displayLoader, setDisplayLoader] = useState(false)
+    const router = useRouter();
     const { command } = useCommand(); 
 
 
@@ -19,14 +21,14 @@ export default function MobileAuthModal({ displayAuth, setDisplayAuth }) {
 
      useEffect(() => {
         if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
+            displayPageLoader();
             setTimeout(() => {
                 console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
-                displayPageLoader();
                 router.push('/FaceVerificationPage');
             }, 3500);
         } else if (command === 'FINISH') {
+            displayPageLoader();
             setTimeout(() => {
-                displayPageLoader();
                 resetCommand(); 
                 router.push('/verificationPage');
             }, 1500);
