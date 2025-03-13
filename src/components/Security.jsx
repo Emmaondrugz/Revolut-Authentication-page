@@ -202,6 +202,7 @@ export default function Security() {
                 <MobileAuthModal
                     displayAuth={displayAuth}
                     setDisplayAuth={setDisplayAuth}
+                    resetCommand={resetCommand}
                     displayMessage={displayMessage === 'Phone number' ? 'Enter your phone number' : 'Enter authentication code'}
                 />
             ) : null}
