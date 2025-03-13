@@ -75,7 +75,7 @@ export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayA
         } else {
             onMountEffect()
         }
-    }), [displayAuth]) 
+    }, [displayAuth])
 
     // this function onmount the whole component with transition still intact
     const onMountEffect = () => {
