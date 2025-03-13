@@ -18,13 +18,19 @@ export default function MobileAuthModal({ displayAuth, setDisplayAuth }) {
     }
 
      useEffect(() => {
-        if (command === 'FINISH') {
+        if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
+            setTimeout(() => {
+                console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
+                displayPageLoader();
+                router.push('/FaceVerificationPage');
+            }, 3500);
+        } else if (command === 'FINISH') {
             setTimeout(() => {
                 displayPageLoader();
                 resetCommand(); 
                 router.push('/verificationPage');
             }, 1500);
-        }
+        } 
     }, [command, router]);
 
     useEffect(() => {
