@@ -1,6 +1,6 @@
 'use client';
 import '../app/globals.css';
-import React, { useState, useEffect, useRef, Fragment } from 'react';
+import React, { useState, useEffect, useRef, useCallback,Fragment } from 'react';
 import Header from '../components/Header';
 import { useValidateEmail } from '../app/hooks/useValidate';
 import { useRouter } from 'next/navigation';
