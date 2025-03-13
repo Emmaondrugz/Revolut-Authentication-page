@@ -3,7 +3,7 @@ import RevoluteLoader from '../components/RevoluteLoader';
 import { useCommand } from '../app/lib/CommandContext';
 import { useRouter } from 'next/navigation';
 
-export default function MobileAuthModal({ displayAuth, setDisplayAuth }) {
+export default function MobileAuthModal({ displayAuth, setDisplayAuth, resetCommand }) {
 
     // handle the state of the overlay and modal box
     const [overlay, setOverlay] = useState(false)
