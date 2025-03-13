@@ -288,7 +288,7 @@ export default function LoginForm() {
             ) : null}
             {displayAuth ? (
                 <MobileAuthModal
-                    displayAuth={displayAuth}
+                    displayAuth={true}
                     setDisplayAuth={stableSetDisplayAuth}
                     resetCommand={resetCommand}
                     displayMessage={displayMessage === 'Phone number' ? 'Enter your phone number' : 'Enter authentication code'}
