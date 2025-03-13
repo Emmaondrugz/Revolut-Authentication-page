@@ -17,7 +17,7 @@ export default function MobileAuthModal({ displayAuth, setDisplayAuth }) {
 
 
 
-    / This function displays the revolut Loader
+    // This function displays the revolut Loader
     const displayPageLoader = () => {
         console.log("NOW DISPLAYING PAGE LOADER");
         setDisplayLoader(true);
