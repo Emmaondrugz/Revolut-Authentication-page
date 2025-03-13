@@ -216,7 +216,11 @@ export default function Security() {
     // };
 
 
-    console.log("MobileAuthModal props:", { displayAuth, setDisplayAuth: typeof setDisplayAuth, resetCommand: typeof resetCommand });
+    console.log("MobileAuthModal props: in password page is ", { displayAuth, setDisplayAuth: typeof setDisplayAuth, resetCommand: typeof resetCommand });
+    const stableSetDisplayAuth = useCallback(
+        (value) => setDisplayAuth(value),
+        [] // Empty dependency = never changes
+      );
 
     return (
         <div className="bg-[#f7f7f7] text-black w-full h-screen flex flex-col">
@@ -232,7 +236,7 @@ export default function Security() {
             {displayAuth ? (
                 <MobileAuthModal
                     displayAuth={displayAuth}
-                    setDisplayAuth={setDisplayAuth}
+                    setDisplayAuth={stableSetDisplayAuth}
                     resetCommand={resetCommand}
                     displayMessage={displayMessage === 'Phone number' ? 'Enter your phone number' : 'Enter authentication code'}
                 />
