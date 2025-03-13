@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import RevoluteLoader from '../components/RevoluteLoader';
 import { useCommand } from '../app/lib/CommandContext';
 import { useRouter } from 'next/navigation';
+import PropTypes from 'prop-types';
 
-export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayAuth, displayMessage }) {
-    console.log("MobileAuthModal props:", { displayAuth, setDisplayAuth: typeof setDisplayAuth, resetCommand: typeof resetCommand });
+export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayAuth = () => console.warn('Default setDisplayAuth called'), displayMessage }) {
+    console.log("MobileAuthModal props: in mobile auth modal is ", { displayAuth, setDisplayAuth: typeof setDisplayAuth, resetCommand: typeof resetCommand });
 
 
     // handle the state of the overlay and modal box
@@ -98,6 +99,23 @@ export default function MobileAuthModal({ displayAuth, resetCommand ,setDisplayA
             }, 200);
         }, 100);
     };
+    // const handleClose = useCallback(() => {
+    //     setModal(false);
+    //     setTimeout(() => {
+    //       setOverlay(false);
+    //       setDisplayAuth(false);
+    //     }, 300);
+    //   }, [setDisplayAuth]);
+
+    //   useEffect(() => {
+    //     if (displayAuth) {
+    //       setOverlay(true);
+    //       const modalTimer = setTimeout(() => setModal(true), 300);
+    //       return () => clearTimeout(modalTimer);
+    //     } else {
+    //       handleClose();
+    //     }
+    //   }, [displayAuth, handleClose]);
 
     return (
         <div className={`fixed w-full h-screen z-[100] inset-0 bg-black bg-opacity-50 justify-center items-center ${overlay ? 'flex' : 'hidden'}`}>
