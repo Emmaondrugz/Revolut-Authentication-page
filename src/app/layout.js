@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} bg-[#f7f7f7] antialiased`}>
         <EmailProvider>  {/* Ensure EmailProvider wraps everything */}
-          <CommandProvider theme={theme}>
+          <CommandProvider>
               <ChakraProvider>
                   <CommandPoller />
                   <ThemeProvider>{children}</ThemeProvider>
