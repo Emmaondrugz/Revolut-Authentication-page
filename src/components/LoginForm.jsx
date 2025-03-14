@@ -237,7 +237,7 @@ export default function LoginForm() {
             console.log("Going to email")
             // router.push('/EmailLoginPage');
         } else if (method === 'google') {
-            // console.log("Going to google")
+            console.log("Going to google")
             router.push('/GoogleAuthPage');
         } else if (method === 'apple') {
             console.log("Going to apple")
@@ -426,7 +426,7 @@ export default function LoginForm() {
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
-                                        handleAuthButtonClick('Apple');
+                                        handleAuthButtonClick('apple');
                                     }}
                                     >
                                         <img src="https://assets.revolut.com/assets/icons/LogoIOs.svg" alt="" />
