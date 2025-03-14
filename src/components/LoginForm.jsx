@@ -70,7 +70,7 @@ export default function LoginForm() {
       setYourCommandState(newCommand);
     };
 
-    const navigateWithLoader = async (path: string) => {
+    const navigateWithLoader = async (path) => {
       // Show loader immediately
       setDisplayLoader(true);
       
