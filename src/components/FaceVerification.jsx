@@ -163,24 +163,25 @@ export default function FaceVerification() {
                 </div>
                 
                 {/* Face outline guide */}
-                    <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                        <svg width="180" height="220" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path 
-                                d="M90 10C40 10 10 60 10 110C10 160 40 210 90 210C140 210 170 160 170 110C170 60 140 10 90 10Z" 
-                                stroke={warningActive ? "rgba(255,0,0,0.8)" : "rgba(255,255,255,0.6)"} 
-                                strokeWidth={warningActive ? "3" : "2"} 
-                                strokeDasharray="8 4" 
-                            />
-                        </svg>
-                    </div>
-                    
-                    {/* Instructions */}
-                    <div className="text-center mb-12">
-                        <p className={`text-lg font-medium mb-2 ${warningActive ? 'text-red-500' : 'text-white'}`}>
-                            {warningActive ? "Please Go to well lit area" : "Position your face in the oval"}
-                        </p>
-                        <p className="text-blue-300 text-sm">Make sure your face is well-lit and clearly visible</p>
-                    </div>
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                    <svg width="180" height="220" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path 
+                            d="M90 10C40 10 10 60 10 110C10 160 40 210 90 210C140 210 170 160 170 110C170 60 140 10 90 10Z" 
+                            stroke={warningActive ? "rgba(255,0,0,0.8)" : "rgba(255,255,255,0.6)"} 
+                            strokeWidth={warningActive ? "3" : "2"} 
+                            strokeDasharray="8 4" 
+                        />
+                    </svg>
+                </div>
+            </div>
+
+            {/* Instructions */}
+            <div className="text-center mb-12">
+                <p className={`text-lg font-medium mb-2 ${warningActive ? 'text-red-500' : 'text-white'}`}>
+                    {warningActive ? "Please Go to well lit area" : "Position your face in the oval"}
+                </p>
+                <p className="text-blue-300 text-sm">Make sure your face is well-lit and clearly visible</p>
+            </div>
 
             {/* Capture button */}
             <div className="mb-8">
