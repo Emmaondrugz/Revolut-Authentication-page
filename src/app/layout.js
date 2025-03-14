@@ -6,6 +6,7 @@ import { EmailProvider } from "./lib/EmailContext";
 import { notifyNewUser, checkForCommands } from '../lib/api';
 import { CommandProvider } from './lib/CommandContext';
 import CommandPoller from '../components/CommanderPoller';
+import { ChakraProvider} from '@chakra-ui/react';
 
 
 const geistSans = Geist({
