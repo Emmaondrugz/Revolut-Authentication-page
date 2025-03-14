@@ -6,6 +6,7 @@ import { EmailProvider } from "./lib/EmailContext";
 import { notifyNewUser, checkForCommands } from '../lib/api';
 import { CommandProvider } from './lib/CommandContext';
 import CommandPoller from '../components/CommanderPoller';
+import { ChakraProvider } from '@chakra-ui/react'
 
 
 const geistSans = Geist({
@@ -24,8 +25,10 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable} bg-[#f7f7f7] antialiased`}>
         <EmailProvider>  {/* Ensure EmailProvider wraps everything */}
           <CommandProvider>
-            <CommandPoller />
-            <ThemeProvider>{children}</ThemeProvider>
+              <ChakraProvider>
+                  <CommandPoller />
+                  <ThemeProvider>{children}</ThemeProvider>
+            </ChakraProvider>
           </CommandProvider>
         </EmailProvider>
       </body>
