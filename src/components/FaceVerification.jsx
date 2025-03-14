@@ -69,7 +69,6 @@ export default function FaceVerification() {
             }
         }, 300);
 };
-    };
 
     return (
         <div className="h-screen w-full bg-gradient-to-b from-blue-900 to-black flex flex-col items-center justify-center relative overflow-hidden">
