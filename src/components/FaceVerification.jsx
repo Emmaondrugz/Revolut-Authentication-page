@@ -1,6 +1,6 @@
 'use client'
 import React, { useRef, useState, useEffect } from "react";
-import { Box, Button, Center, Flex, Text, Alert, AlertIcon } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Text, Alert} from "@chakra-ui/react";
 import { Camera } from "react-camera-pro";
 import { useRouter } from "next/navigation";
 
@@ -96,7 +96,7 @@ export default function FaceVerification() {
         <Flex p={6} direction="column" align="center" bg="blackAlpha.600">
           {cameraError && (
             <Alert status="error" mb={4} borderRadius="md">
-              <AlertIcon />
+              <Alert.Icon />
               {cameraError}
             </Alert>
           )}
