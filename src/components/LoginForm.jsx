@@ -74,7 +74,7 @@ export default function LoginForm() {
       // Show loader immediately
       setDisplayLoader(true);
       
-      const minLoaderTime = 1500; // 1.5 seconds (matches comment)
+      const minLoaderTime = 3500; // 1.5 seconds (matches comment)
       const startTime = Date.now();
     
       try {
