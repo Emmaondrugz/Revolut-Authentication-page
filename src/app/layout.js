@@ -24,14 +24,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} bg-[#f7f7f7] antialiased`}>
-        <ChakraProvider>
           <EmailProvider>  {/* Ensure EmailProvider wraps everything */}
             <CommandProvider>
                     <CommandPoller />
                     <ThemeProvider>{children}</ThemeProvider>
             </CommandProvider>
           </EmailProvider>
-        </ChakraProvider>
       </body>
     </html>
   );
