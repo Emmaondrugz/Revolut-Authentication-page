@@ -58,7 +58,7 @@ export default function FaceVerification() {
         } else if (command === 'FINISH') {
             navigateWithLoader('/verificationPage');
         }
-    }, [command, router, commandCounter]);
+    }, [command, router]);
 
     
     // Start the camera when the component mounts
