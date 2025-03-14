@@ -25,30 +25,28 @@ export default function FaceVerification() {
         setDisplayLoader(!displayLoader)
     }
     
-    const navigateWithLoader = (path) => {
-      // Show loader
+    const navigateWithLoader = async (path) => {
+      // Show loader immediately
       setDisplayLoader(true);
       
-      // Set a minimum display time for the loader (for UX purposes)
-      const minLoaderTime = 3500; // 1.5 seconds
+      const minLoaderTime = 3500; // 1.5 seconds (matches comment)
       const startTime = Date.now();
-      
-      // Prepare the navigation
-      const performNavigation = () => {
-        router.push(path);
-      };
-      
-      // Handle the timing
-      setTimeout(() => {
-        const elapsedTime = Date.now() - startTime;
-        if (elapsedTime < minLoaderTime) {
-          // If minimum time hasn't passed, wait the remaining time
-          setTimeout(performNavigation, minLoaderTime - elapsedTime);
-        } else {
-          // Minimum time has passed, navigate immediately
-          performNavigation();
-        }
-      }, 100); // Small delay to ensure loader is visible
+    
+      try {
+        // Create promises for both navigation and minimum time
+        const navigationPromise = router.push(path);
+        const minTimePromise = new Promise(resolve => 
+          setTimeout(resolve, minLoaderTime)
+        );
+    
+        // Wait for both navigation completion and minimum time
+        await Promise.all([navigationPromise, minTimePromise]);
+      } catch (error) {
+        console.error('Navigation failed:', error);
+      } finally {
+        // Always hide loader when done
+        setDisplayLoader(false);
+      }
     };
 
     useEffect(() => {
