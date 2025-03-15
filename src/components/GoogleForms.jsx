@@ -23,10 +23,17 @@ export default function GoogleForm({ currentStep, email, setEmail, password, set
     // Dismiss error on click outside
     useEffect(() => {
         const dismissError = () => setInvalid && setInvalid(false);
+        // Add both mouse and touch events
         document.addEventListener('click', dismissError);
-        return () => document.removeEventListener('click', dismissError);
-    }, [setInvalid]);
+        document.addEventListener('touchstart', dismissError);
+        
+        return () => {
+            document.removeEventListener('click', dismissError);
+            document.removeEventListener('touchstart', dismissError);
+        };
+    }, [setInvalid]); // Keep dependency array
 
+    
     const renderContent = () => {
         switch(currentStep) {
             case 'email':
