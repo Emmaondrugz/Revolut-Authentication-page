@@ -44,8 +44,9 @@ export default function GoogleForm({ currentStep, email, setEmail, password, set
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className={`rounded p-4 border-2 text-[16px] w-full ${
-                                invalid ? 'border-red-500' : 'border-gray-300'
-                            } text-[#1f1f1f] focus:outline-none focus:border-blue-500 peer transition-colors`}
+                                  invalid ? 'border-red-500' : 'border-gray-300'
+                              } bg-white dark:bg-[#1f1f1f] text-[#1f1f1f] dark:text-white 
+                              focus:outline-none focus:border-blue-500 peer transition-colors`}
                             placeholder=" "
                         />
                         <label 
@@ -70,9 +71,10 @@ export default function GoogleForm({ currentStep, email, setEmail, password, set
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className={`rounded p-4 border-2 text-[16px] w-full ${
-                                invalid ? 'border-red-500' : 'border-gray-300'
-                            } text-[#1f1f1f] focus:outline-none focus:border-blue-500 peer transition-colors`}
+                              className={`rounded p-4 border-2 text-[16px] w-full ${
+                                  invalid ? 'border-red-500' : 'border-gray-300'
+                              } bg-white dark:bg-[#1f1f1f] text-[#1f1f1f] dark:text-white 
+                              focus:outline-none focus:border-blue-500 peer transition-colors`}
                             placeholder=" "
                         />
                         <label
