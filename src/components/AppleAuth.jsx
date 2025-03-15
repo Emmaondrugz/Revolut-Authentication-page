@@ -76,7 +76,34 @@ export default function AppleAuth() {
     const stopLoader = () => {
         setIsLoading(false);
     };
-    
+
+    const hideError = () => {
+      setInvalid(false);
+    };
+
+    // Add to your component body
+    useEffect(() => {
+      const handleGlobalClick = () => {
+        hideError();
+      };
+      
+      document.addEventListener('click', handleGlobalClick);
+      
+      return () => {
+        document.removeEventListener('click', handleGlobalClick);
+      };
+    }, []);
+
+    onFocus={() => {
+      setIsFocused(true);
+      hideError();
+    }}
+
+    onChange={(e) => {
+      setEmail(e.target.value);
+      hideError();
+    }}
+
     return (
         <div className="bg-white text-black">
             {/* Header */}
