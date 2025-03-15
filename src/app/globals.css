@@ -130,6 +130,18 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
+input {
+  -webkit-text-fill-color: #1f1f1f !important;
+  caret-color: #1f1f1f;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #1f1f1f !important;
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+
 
 
 .cr-button {
