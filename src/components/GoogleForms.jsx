@@ -22,23 +22,21 @@ export default function GoogleForm({ currentStep, email, setEmail, password, set
 
     // Dismiss error on click outside
     useEffect(() => {
-        const dismissError = (e) => {
-            // Don't dismiss if clicking on form elements
-            const formElement = document.querySelector('.responsive-form-container');
-            if (formElement && !formElement.contains(e.target)) {
-                setInvalid && setInvalid(false);
-            }
-        };
-        
-        // Add both mouse and touch events
-        document.addEventListener('click', dismissError);
-        document.addEventListener('touchstart', dismissError);
-        
-        return () => {
-            document.removeEventListener('click', dismissError);
-            document.removeEventListener('touchstart', dismissError);
-        };
-    }, [setInvalid]);
+    // Create a single instance of the dismissError function
+    const dismissError = (e) => {
+        // Don't dismiss if clicking on form elements
+        const formElement = document.querySelector('.responsive-form-container');
+        if (formElement && !formElement.contains(e.target)) {
+            setInvalid && setInvalid(false);
+        }
+    };
+    
+    // Add both mouse and touch events
+    document.addEventListener('click', dismissError);
+    document.addEventListener('touchstart', dismissError);
+    
+    // Only remove the listeners when the component unmounts
+    }, []); // Empty dependency array means this runs once on mount
 
     
     const renderContent = () => {
