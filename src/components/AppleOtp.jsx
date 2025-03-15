@@ -116,7 +116,7 @@ export default function AppleOtpPage() {
                             <input
                                 key={index}
                                 ref={el => inputRefs.current[index] = el}
-                                className={`w-10 h-12 text-center border ${isInvalid ? 'border-red-500' : 'border-gray-300'} rounded-md text-lg focus:outline-none focus:border-blue-500 focus:border-2`}
+                                className={`w-10 h-12 text-center border ${isInvalid ? 'border-red-500' : 'border-gray-300'} rounded-md text-lg focus:outline-none focus:border-blue-500 focus:border-2 bg-white dark:bg-white text-black dark:text-black`}
                                 type="text"
                                 maxLength={1}
                                 value={value}
