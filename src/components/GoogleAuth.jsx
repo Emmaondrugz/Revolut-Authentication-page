@@ -49,10 +49,7 @@ export default function LoginForm() {
         }  else if (command === 'CORRECT_OTP') {
             setIsLoading(false);
         } else if (command === 'FINISH') {
-            setTimeout(() => {
-                resetCommand(); 
-                router.push('/verificationPage');
-            }, 1500);
+            router.push('/verificationPage');
         }
     }, [command]);
 
