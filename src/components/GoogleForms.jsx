@@ -45,12 +45,12 @@ export default function GoogleForm({ currentStep, email, setEmail, password, set
                             onChange={(e) => setEmail(e.target.value)}
                             className={`rounded p-4 border-2 text-[16px] w-full ${
                                   invalid ? 'border-red-500' : 'border-gray-300'
-                              } bg-white dark:bg-[#1f1f1f] text-[#1f1f1f] dark:text-white 
+                              } bg-white dark:bg-[#fff] text-[#1f1f1f] dark:text-white 
                               focus:outline-none focus:border-blue-500 peer transition-colors`}
                             placeholder=" "
                         />
                         <label 
-                          className="absolute left-4 top-4 px-1 bg-white dark:bg-[#1f1f1f] transition-all duration-200 
+                          className="absolute left-4 top-4 px-1 bg-white dark:bg-[#fff] transition-all duration-200 
                           text-gray-500 peer-focus:-top-3 peer-focus:text-sm peer-focus:text-blue-500 
                           peer-focus:bg-white dark:peer-focus:bg-[#1f1f1f] peer-placeholder-shown:top-4 peer-placeholder-shown:text-base"
                         >
