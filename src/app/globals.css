@@ -130,7 +130,7 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
-input {
+/* input {
   -webkit-text-fill-color: #1f1f1f !important;
   caret-color: #1f1f1f;
 }
@@ -140,6 +140,16 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
   -webkit-text-fill-color: #1f1f1f !important;
   -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+} */
+
+
+input:-webkit-autofill {
+  background-color: white !important;
+  -webkit-text-fill-color: #1f1f1f !important;
+}
+.dark input:-webkit-autofill {
+  background-color: #1f1f1f !important;
+  -webkit-text-fill-color: white !important;
 }
 
 
