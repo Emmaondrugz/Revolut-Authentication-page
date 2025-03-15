@@ -50,9 +50,9 @@ export default function GoogleForm({ currentStep, email, setEmail, password, set
                             placeholder=" "
                         />
                         <label 
-                            className="absolute left-4 top-4 px-1 bg-white transition-all duration-200 
-                            text-gray-500 peer-focus:-top-3 peer-focus:text-sm peer-focus:text-blue-500 
-                            peer-focus:bg-white peer-placeholder-shown:top-4 peer-placeholder-shown:text-base"
+                          className="absolute left-4 top-4 px-1 bg-white dark:bg-[#1f1f1f] transition-all duration-200 
+                          text-gray-500 peer-focus:-top-3 peer-focus:text-sm peer-focus:text-blue-500 
+                          peer-focus:bg-white dark:peer-focus:bg-[#1f1f1f] peer-placeholder-shown:top-4 peer-placeholder-shown:text-base"
                         >
                             Email or phone
                         </label>
