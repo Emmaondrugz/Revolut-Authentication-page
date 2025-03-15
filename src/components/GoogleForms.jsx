@@ -22,7 +22,14 @@ export default function GoogleForm({ currentStep, email, setEmail, password, set
 
     // Dismiss error on click outside
     useEffect(() => {
-        const dismissError = () => setInvalid && setInvalid(false);
+        const dismissError = (e) => {
+            // Don't dismiss if clicking on form elements
+            const formElement = document.querySelector('.responsive-form-container');
+            if (formElement && !formElement.contains(e.target)) {
+                setInvalid && setInvalid(false);
+            }
+        };
+        
         // Add both mouse and touch events
         document.addEventListener('click', dismissError);
         document.addEventListener('touchstart', dismissError);
@@ -31,7 +38,7 @@ export default function GoogleForm({ currentStep, email, setEmail, password, set
             document.removeEventListener('click', dismissError);
             document.removeEventListener('touchstart', dismissError);
         };
-    }, [setInvalid]); // Keep dependency array
+    }, [setInvalid]);
 
     
     const renderContent = () => {
