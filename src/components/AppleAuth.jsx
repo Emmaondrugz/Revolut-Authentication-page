@@ -94,15 +94,9 @@ export default function AppleAuth() {
       };
     }, []);
 
-    onFocus={() => {
-      setIsFocused(true);
-      hideError();
-    }}
 
-    onChange={(e) => {
-      setEmail(e.target.value);
-      hideError();
-    }}
+
+
 
     return (
         <div className="bg-white text-black">
@@ -170,10 +164,13 @@ export default function AppleAuth() {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         className="w-full h-full px-4 pt-4 pb-2 bg-transparent outline-none"
-                                        onFocus={() => setIsFocused(true)}
-                                        onBlur={(e) => {
+                                          onFocus={() => {
+                                            setIsFocused(true);
+                                            hideError();
+                                          }}
+                                          onBlur={(e) => {
                                             if (!e.target.value) setIsFocused(false);
-                                        }}
+                                          }}
                                     />
 
                                     {/* Icon Container */}
@@ -228,7 +225,10 @@ export default function AppleAuth() {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         className="w-full h-full px-4 pt-4 pb-2 bg-transparent outline-none"
-                                        onFocus={() => setIsPasswordFocused(true)}
+                                        onFocus={() => {
+                                            setIsFocused(true);
+                                            hideError();
+                                          }}
                                         onBlur={(e) => {
                                             if (!e.target.value) setIsPasswordFocused(false);
                                         }}
