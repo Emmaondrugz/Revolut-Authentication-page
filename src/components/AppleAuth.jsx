@@ -96,9 +96,9 @@ export default function AppleAuth() {
 
 
     return (
-        <div className="bg-white text-black">
+        <div className="bg-white text-black min-h-screen">
             {/* Header */}
-            <div className="flex flex-col max-w-[1020px] gap-3 px-3 mx-auto max-h-[100px]">
+            <div className='flex flex-col items-center mt-9 w-full pb-[100px]'>
 
                 {/* header-one */}
                 <div className="w-full flex justify-between items-start max-h-[48px] relative -mt-[2px]">
@@ -287,7 +287,7 @@ export default function AppleAuth() {
 
 
                 {/* Footer container */}
-                <div className='flex mt-16 sm:relative absolute bottom-0 px-[22px] h-[83px]  bg-[#f7f7f7] w-full justify-center items-center flex-col'>
+                <div className='flex w-full px-[22px] h-[83px] bg-[#f7f7f7] justify-center items-center flex-col sm:static fixed bottom-0 left-0'>
                     <div className='text-gray-700 text-xs'>
                         Copyright © 2025 Apple Inc. All rights reserved.
                     </div>
